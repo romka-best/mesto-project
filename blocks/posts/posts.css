@@ -1,0 +1,30 @@
+.posts {
+  margin: 0 20rem 0;
+  list-style: none;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28.2rem, 1fr));
+  row-gap: 2rem;
+  column-gap: 1.7rem;
+
+  justify-content: center;
+}
+
+@media screen and (max-width: 1090px) {
+  .posts {
+    margin: 0 15rem 0;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .posts {
+    margin: 0 5rem 0;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .posts {
+    margin: 0 1.9rem 0;
+  }
+}

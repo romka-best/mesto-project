@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru" style="font-size: 10px">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesto</title>
+  <link rel="icon" href="images/logo-color-black.svg">
+  <link rel="stylesheet" href="pages/index.css">
+</head>
+<body class="page">
+<header class="header">
+  <a href="#" class="header__logo"></a>
+  <div class="header__line"></div>
+</header>
+<aside class="profile">
+  <img src="images/profile-photo.jpg" alt="Аватарка профиля" class="profile__avatar"/>
+  <div class="profile__info">
+    <h1 class="profile__name">Жак-Ив Кусто</h1>
+    <p class="profile__description">Исследователь океана</p>
+    <button class="profile__edit-button"></button>
+  </div>
+  <button class="profile__add-button"></button>
+</aside>
+<div class="popup">
+  <div class="popup__container">
+    <button class="popup__close-button"></button>
+    <form class="popup__form">
+      <h2 class="popup__title">Редактировать профиль</h2>
+      <input type="text" class="popup__input-field" name="name" placeholder="Ваше имя" value="Жак-Ив Кусто">
+      <input type="text" class="popup__input-field" name="description" placeholder="Ваша деятельность"
+             value="Исследователь океана">
+      <button type="submit" class="popup__save-button">Сохранить</button>
+    </form>
+  </div>
+</div>
+<main>
+  <ul class="posts">
+    <li class="post">
+      <img src="images/posts-karachevsk.jpg" alt="Картинка поста" class="post__photo">
+      <div class="post__info">
+        <h2 class="post__title">Карачаевск</h2>
+        <button class="post__reaction"></button>
+      </div>
+    </li>
+    <li class="post">
+      <img src="images/posts-elbrus.jpg" alt="Картинка поста" class="post__photo">
+      <div class="post__info">
+        <h2 class="post__title">Гора Эльбрус</h2>
+        <button class="post__reaction"></button>
+      </div>
+    </li>
+    <li class="post">
+      <img src="images/posts-dombai.jpg" alt="Картинка поста" class="post__photo">
+      <div class="post__info">
+        <h2 class="post__title">Домбай</h2>
+        <button class="post__reaction post__reaction_active"></button>
+      </div>
+    </li>
+    <li class="post">
+      <img src="images/posts-elbrus.jpg" alt="Картинка поста" class="post__photo">
+      <div class="post__info">
+        <h2 class="post__title">Гора Эльбрус</h2>
+        <button class="post__reaction"></button>
+      </div>
+    </li>
+    <li class="post">
+      <img src="images/posts-dombai.jpg" alt="Картинка поста" class="post__photo">
+      <div class="post__info">
+        <h2 class="post__title">Домбай</h2>
+        <button class="post__reaction"></button>
+      </div>
+    </li>
+    <li class="post">
+      <img src="images/posts-karachevsk.jpg" alt="Картинка поста" class="post__photo">
+      <div class="post__info">
+        <h2 class="post__title">Карачаево-Что-то-ещё</h2>
+        <button class="post__reaction"></button>
+      </div>
+    </li>
+  </ul>
+</main>
+<footer class="footer">
+  <p class="footer_copyright">© 2021 Mesto Russia</p>
+</footer>
+</body>
+</html>

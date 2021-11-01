@@ -1,0 +1,25 @@
+.header {
+  margin: 4.5rem 20rem 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 1090px) {
+  .header {
+    margin: 4.05rem 15rem 0;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .header {
+    margin: 3.06rem 0 0;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .header {
+    margin: 2.8rem 0 0;
+  }
+}

@@ -1,0 +1,25 @@
+.post__reaction {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: url('../../../images/post-reaction.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  border: none;
+  background-color: transparent;
+
+  margin-left: 3rem;
+
+  min-width: 2.2rem;
+  min-height: 1.9rem;
+  padding: 0;
+
+  transition: opacity linear .2s;
+}
+
+.post__reaction:hover {
+  cursor: pointer;
+  opacity: 60%;
+}
