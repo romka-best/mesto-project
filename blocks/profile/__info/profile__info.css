@@ -4,20 +4,17 @@
   row-gap: 1.6rem;
   align-items: center;
   grid-template-rows: 3.9rem;
-  grid-row: 1/1;
-  grid-column: 2/2;
+
+  margin-right: 3rem;
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 680px) {
   .profile__info {
-    grid-row: 2/2;
-    grid-column: 1/1;
-    column-gap: 0;
+    column-gap: 1rem;
     row-gap: 1.4rem;
     justify-items: center;
-    grid-template-columns: 100%;
     grid-template-rows: 2.6rem 1.4rem;
 
-    margin: 0 auto;
+    margin: 0;
   }
 }

@@ -1,25 +1,30 @@
 .header {
-  margin: 4.5rem 20rem 0;
+  margin: 4.5rem auto 0;
+  max-width: 88rem;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  border-bottom: .1rem solid rgba(84, 84, 84, .7);
+  padding-bottom: 4.1rem;
 }
 
-@media screen and (max-width: 1090px) {
+@media screen and (max-width: 1024px) {
   .header {
-    margin: 4.05rem 15rem 0;
+    padding: 0 5rem 4.1rem;
   }
 }
 
 @media screen and (max-width: 840px) {
   .header {
-    margin: 3.06rem 0 0;
+    margin: 3.06rem auto 0;
   }
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 680px) {
   .header {
+    padding: 0 0 3.16rem;
     margin: 2.8rem 0 0;
   }
 }

@@ -1,6 +1,7 @@
 .post__photo {
   object-fit: cover;
   object-position: center;
+  height: 28.2rem;
   width: 100%;
 
   border-top-right-radius: 1rem;

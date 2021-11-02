@@ -2,10 +2,12 @@
   background: #fff;
   border-radius: 1rem;
 
+  box-shadow: 0 0 2.5rem rgba(0, 0, 0, .15);
+
   position: relative;
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 680px) {
   .popup__container {
     margin: 0 1.9rem;
   }

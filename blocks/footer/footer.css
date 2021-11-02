@@ -1,21 +1,23 @@
 .footer {
-  margin: 6.6rem 0 6rem 20rem;
+  margin: 6.6rem auto 6rem;
+  max-width: 88rem;
 }
 
-@media screen and (max-width: 1090px) {
+@media screen and (max-width: 1024px) {
   .footer {
-    margin: 6.12rem 0 5.36rem 15rem;
+    padding: 0 5rem;
   }
 }
 
 @media screen and (max-width: 840px) {
   .footer {
-    margin: 5.64rem 0 4.72rem 5rem;
+    margin: 5.64rem auto 4.72rem;
   }
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 680px) {
   .footer {
+    padding: 0;
     margin: 4.8rem 0 3.6rem 1.9rem;
   }
 }

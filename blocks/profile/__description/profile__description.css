@@ -20,8 +20,11 @@
   }
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 680px) {
   .profile__description {
     font-size: 1.4rem;
+
+    margin-left: 2.8rem;
+    max-width: 100%;
   }
 }

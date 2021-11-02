@@ -1,25 +1,25 @@
 .profile {
-  margin: 4rem 20rem 5rem;
-
+  margin: 4rem auto 5rem;
+  max-width: 88rem;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
 }
 
-@media screen and (max-width: 1090px) {
+@media screen and (max-width: 1024px) {
   .profile {
-    margin: 3.55rem 15rem 3.7rem;
+    padding: 0 5rem;
   }
 }
 
 @media screen and (max-width: 840px) {
   .profile {
-    margin: 3rem 5rem 3.25rem;
+    margin: 3rem auto 3.25rem;
   }
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 680px) {
   .profile {
+    padding: 0;
     margin: 4.2rem 1.9rem 3.6rem;
 
     flex-direction: column;

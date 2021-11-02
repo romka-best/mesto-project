@@ -1,6 +1,8 @@
 @import url(../vendor/normalize.css);
 @import url(../vendor/fonts.css);
 
+@import url(../blocks/html-page/html-page.css);
+
 @import url(../blocks/page/page.css);
 
 @import url(../blocks/popup/popup.css);
@@ -25,6 +27,7 @@
 @import url(../blocks/profile/__name/profile__name.css);
 
 @import url(../blocks/posts/posts.css);
+@import url(../blocks/posts-list/posts-list.css);
 @import url(../blocks/post/post.css);
 @import url(../blocks/post/__info/post__info.css);
 @import url(../blocks/post/__title/post__title.css);
