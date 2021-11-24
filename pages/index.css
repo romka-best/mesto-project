@@ -16,7 +16,6 @@
 
 @import url(../blocks/header/header.css);
 @import url(../blocks/header/__logo/header__logo.css);
-@import url(../blocks/header/__line/header__line.css);
 
 @import url(../blocks/profile/profile.css);
 @import url(../blocks/profile/__description/profile__description.css);
@@ -32,6 +31,7 @@
 @import url(../blocks/post/__info/post__info.css);
 @import url(../blocks/post/__title/post__title.css);
 @import url(../blocks/post/__photo/post__photo.css);
+@import url(../blocks/post/__delete/post__delete.css);
 @import url(../blocks/post/__reaction/post__reaction.css);
 @import url(../blocks/post/__reaction/_active/post__reaction_active.css);
 

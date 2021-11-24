@@ -1,5 +1,5 @@
 "use strict";
-export const postReactions = document.querySelectorAll('.post__reaction');
+const postReactions = document.querySelectorAll('.post__reaction');
 
 postReactions.forEach((postReaction) => {
   postReaction.addEventListener('click', (event) => {
