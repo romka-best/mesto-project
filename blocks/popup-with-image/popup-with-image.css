@@ -1,7 +1,6 @@
-.popup {
+.popup-with-image {
   opacity: 0;
   visibility: hidden;
-  transition: visibility .5s, opacity .5s linear;
 
   display: flex;
   align-items: center;
@@ -15,5 +14,5 @@
   min-width: 320px;
   z-index: 5;
 
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.9);
 }

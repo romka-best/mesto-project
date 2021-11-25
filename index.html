@@ -24,65 +24,49 @@
   </section>
   <section class="posts">
     <ul class="posts-list">
-      <li class="post">
-        <img src="images/posts-karachevsk.jpg" alt="Картинка поста" class="post__photo">
-        <div class="post__info">
-          <h2 class="post__title">Карачаевск</h2>
-          <button class="post__reaction" type="button"></button>
-        </div>
-      </li>
-      <li class="post">
-        <img src="images/posts-bear.jpg" alt="Картинка поста" class="post__photo">
-        <div class="post__info">
-          <h2 class="post__title">Косолапый из России</h2>
-          <button class="post__reaction" type="button"></button>
-        </div>
-      </li>
-      <li class="post">
-        <img src="images/posts-dombai.jpg" alt="Картинка поста" class="post__photo">
-        <div class="post__info">
-          <h2 class="post__title">Домбай</h2>
-          <button class="post__reaction post__reaction_active" type="button"></button>
-        </div>
-      </li>
-      <li class="post">
-        <img src="images/posts-elbrus.jpg" alt="Картинка поста" class="post__photo">
-        <div class="post__info">
-          <h2 class="post__title">Гора Эльбрус</h2>
-          <button class="post__reaction" type="button"></button>
-        </div>
-      </li>
-      <li class="post">
-        <img src="images/posts-dombai.jpg" alt="Картинка поста" class="post__photo">
-        <div class="post__info">
-          <h2 class="post__title">Домбай</h2>
-          <button class="post__reaction" type="button"></button>
-        </div>
-      </li>
-      <li class="post">
-        <img src="images/posts-karachevsk.jpg" alt="Картинка поста" class="post__photo">
-        <div class="post__info">
-          <h2 class="post__title">Карачаево-Что-то-ещё</h2>
-          <button class="post__reaction" type="button"></button>
-        </div>
-      </li>
     </ul>
   </section>
 </main>
 <footer class="footer">
   <p class="footer__copyright">© 2021 Mesto Russia</p>
 </footer>
-<div class="popup">
-  <div class="popup__container">
+<div class="popup-with-image">
+  <div class="popup-with-image__container">
     <button class="popup__close-button" type="button"></button>
-    <form class="popup__form" name="edit_profile">
-      <h2 class="popup__title">Редактировать профиль</h2>
-      <input type="text" class="popup__input-field" name="name" placeholder="Ваше имя" value="Жак-Ив Кусто">
-      <input type="text" class="popup__input-field" name="description" placeholder="Ваша деятельность"
-             value="Исследователь океана">
-      <button type="submit" class="popup__save-button">Сохранить</button>
-    </form>
+    <figure class="popup-with-image__figure">
+      <img alt="Картинка поста" class="popup-with-image__image">
+      <figcaption class="popup-with-image__figcaption"></figcaption>
+    </figure>
   </div>
 </div>
+<template id="post">
+  <li class="post">
+    <button class="post__delete" type="button"></button>
+    <img alt="Картинка поста" class="post__photo">
+    <div class="post__info">
+      <h2 class="post__title"></h2>
+      <button class="post__reaction" type="button"></button>
+    </div>
+  </li>
+</template>
+<template id="popup">
+  <div class="popup">
+    <div class="popup__container">
+      <button class="popup__close-button" type="button"></button>
+      <form class="popup__form">
+        <h2 class="popup__title"></h2>
+        <input type="text" class="popup__input-field" required>
+        <input type="text" class="popup__input-field" required>
+        <button type="submit" class="popup__save-button">Сохранить</button>
+      </form>
+    </div>
+  </div>
+</template>
+<script type="module" src="blocks/popup/popup.js"></script>
+<script type="module" src="blocks/profile/__edit-button/profile__edit-button.js"></script>
+<script type="module" src="blocks/profile/__add-button/profile__add-button.js"></script>
+<script type="module" src="blocks/posts-list/posts-list.js"></script>
+<script type="module" src="blocks/post/__reaction/post__reaction.js"></script>
+<script type="module" src="blocks/post/__delete/post__delete.js"></script>
 </body>
 </html>
