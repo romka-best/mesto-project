@@ -1,4 +1,6 @@
 "use strict";
+import {openPopupWithImage} from "../popup-with-image/popup-with-image.js";
+
 const initialCards = [
   {
     name: 'Архыз',
@@ -34,6 +36,7 @@ initialCards.forEach((card) => {
 
   postElement.querySelector('.post__photo').src = card.link;
   postElement.querySelector('.post__title').textContent = card.name;
+  postElement.querySelector('.post__photo').addEventListener('click', openPopupWithImage);
 
   postsList.append(postElement);
 })

@@ -2,6 +2,7 @@
 import {postTemplate} from '../posts-list/posts-list.js';
 import {setReaction} from "../post/__reaction/post__reaction.js";
 import {setDelete} from "../post/__delete/post__delete.js";
+import {openPopupWithImage} from "../popup-with-image/popup-with-image.js";
 
 export function createPopup(popupTitle, popupNameForm, input1Name, input1Placeholder, input2Name, input2Placeholder) {
   const popupTemplate = document.querySelector('#popup').content;
@@ -60,6 +61,7 @@ export function createPopup(popupTitle, popupNameForm, input1Name, input1Placeho
       postElement.querySelector('.post__photo').src = newDataFromInput2;
       postElement.querySelector('.post__reaction').addEventListener('click', setReaction);
       postElement.querySelector('.post__delete').addEventListener('click', setDelete);
+      postElement.querySelector('.post__photo').addEventListener('click', openPopupWithImage);
 
       postsList.prepend(postElement);
     }
