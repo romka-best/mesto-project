@@ -1,8 +1,17 @@
 "use strict";
-import {popup} from '../../popup/popup.js';
+import {createPopup} from '../../popup/popup.js';
 
-const profileAddButton = document.querySelector('.profile__add-button');
+const page = document.querySelector('.page');
 
-profileAddButton.addEventListener('click', () => {
-  // popup.classList.add('popup_opened');
+const postAddButton = document.querySelector('.profile__add-button');
+
+postAddButton.addEventListener('click', () => {
+  const popupAddPost = createPopup('Новое место', 'add_post',
+    'name', 'Название', 'url', 'Ссылка на картинку')
+
+  page.append(popupAddPost);
+
+  setTimeout(() => {
+    popupAddPost.classList.add('popup_opened');
+  });
 })

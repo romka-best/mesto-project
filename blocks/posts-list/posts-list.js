@@ -26,7 +26,7 @@ const initialCards = [
   }
 ];
 
-const postTemplate = document.querySelector('#post').content;
+export const postTemplate = document.querySelector('#post').content;
 const postsList = document.querySelector('.posts-list');
 
 initialCards.forEach((card) => {

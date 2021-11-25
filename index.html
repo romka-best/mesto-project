@@ -29,17 +29,6 @@
 <footer class="footer">
   <p class="footer__copyright">© 2021 Mesto Russia</p>
 </footer>
-<div class="popup">
-  <div class="popup__container">
-    <button class="popup__close-button" type="button"></button>
-    <form class="popup__form" name="edit_profile">
-      <h2 class="popup__title">Редактировать профиль</h2>
-      <input type="text" class="popup__input-field" name="name" placeholder="Ваше имя">
-      <input type="text" class="popup__input-field" name="description" placeholder="Ваша деятельность">
-      <button type="submit" class="popup__save-button">Сохранить</button>
-    </form>
-  </div>
-</div>
 <template id="post">
   <li class="post">
     <button class="post__delete" type="button"></button>
@@ -50,9 +39,20 @@
     </div>
   </li>
 </template>
+<template id="popup">
+  <div class="popup">
+    <div class="popup__container">
+      <button class="popup__close-button" type="button"></button>
+      <form class="popup__form">
+        <h2 class="popup__title"></h2>
+        <input type="text" class="popup__input-field" required>
+        <input type="text" class="popup__input-field" required>
+        <button type="submit" class="popup__save-button">Сохранить</button>
+      </form>
+    </div>
+  </div>
+</template>
 <script type="module" src="blocks/popup/popup.js"></script>
-<script type="module" src="blocks/popup/__close-button/popup__close-button.js"></script>
-<script type="module" src="blocks/popup/__save-button/popup__save-button.js"></script>
 <script type="module" src="blocks/profile/__edit-button/profile__edit-button.js"></script>
 <script type="module" src="blocks/profile/__add-button/profile__add-button.js"></script>
 <script type="module" src="blocks/posts-list/posts-list.js"></script>
