@@ -29,6 +29,28 @@
 <footer class="footer">
   <p class="footer__copyright">© 2021 Mesto Russia</p>
 </footer>
+<div class="popup popup_type_edit-profile">
+  <div class="popup__container">
+    <button class="popup__close-button" type="button"></button>
+    <form class="popup__form" name="edit_profile">
+      <h2 class="popup__title">Редактировать профиль</h2>
+      <input type="text" class="popup__input-field" name="name" placeholder="Ваше имя" required>
+      <input type="text" class="popup__input-field" name="description" placeholder="Ваша деятельность" required>
+      <button type="submit" class="popup__save-button">Сохранить</button>
+    </form>
+  </div>
+</div>
+<div class="popup popup_type_add-post">
+  <div class="popup__container">
+    <button class="popup__close-button" type="button"></button>
+    <form class="popup__form" name="add_post">
+      <h2 class="popup__title">Новое место</h2>
+      <input type="text" class="popup__input-field" name="name" placeholder="Название" required>
+      <input type="text" class="popup__input-field" name="url" placeholder="Ссылка на картинку" required>
+      <button type="submit" class="popup__save-button">Сохранить</button>
+    </form>
+  </div>
+</div>
 <div class="popup-with-image">
   <div class="popup-with-image__container">
     <button class="popup__close-button" type="button"></button>
@@ -47,19 +69,6 @@
       <button class="post__reaction" type="button"></button>
     </div>
   </li>
-</template>
-<template id="popup">
-  <div class="popup">
-    <div class="popup__container">
-      <button class="popup__close-button" type="button"></button>
-      <form class="popup__form">
-        <h2 class="popup__title"></h2>
-        <input type="text" class="popup__input-field" required>
-        <input type="text" class="popup__input-field" required>
-        <button type="submit" class="popup__save-button">Сохранить</button>
-      </form>
-    </div>
-  </div>
 </template>
 <script src="scripts/script.js"></script>
 </body>
