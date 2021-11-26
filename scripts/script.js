@@ -8,6 +8,14 @@ const postsList = document.querySelector('.posts-list');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddPost = document.querySelector('.popup_type_add-post');
 
+const inputNameProfile = document.querySelector('.popup__input-field_type_name-profile');
+const inputDescriptionProfile = document.querySelector('.popup__input-field_type_description-profile');
+const inputNameMesto = document.querySelector('.popup__input-field_type_name-mesto');
+const inputUrlLink = document.querySelector('.popup__input-field_type_url-link');
+const listOfInputs = [inputNameProfile, inputDescriptionProfile, inputNameMesto, inputUrlLink];
+const popupFormEditProfile = document.querySelector('.popup__form_type_edit-profile');
+const popupFormAddPost = document.querySelector('.popup__form_type_add-post');
+
 const popupWithImage = document.querySelector('.popup-with-image');
 const popupImage = document.querySelector('.popup-with-image__image');
 const popupCaption = document.querySelector('.popup-with-image__figcaption');
@@ -39,13 +47,23 @@ const initialCards = [
   }
 ];
 
-setPopup(popupEditProfile);
-setPopup(popupAddPost);
-setPopup(popupWithImage);
+function createPost(name, link) {
+  const postElement = postTemplate.querySelector('.post').cloneNode(true);
 
-function changeReactionPost(event) {
-  const reactionPressed = event.target;
-  reactionPressed.classList.toggle('post__reaction_active');
+  postElement.querySelector('.post__title').textContent = name;
+  postElement.querySelector('.post__photo').src = link;
+  postElement.querySelector('.post__reaction').addEventListener('click', changeReactionPost);
+  postElement.querySelector('.post__delete').addEventListener('click', deletePost);
+  postElement.querySelector('.post__photo').addEventListener('click', (event) => {
+    setPopup(popupWithImage, event);
+    openPopup(popupWithImage);
+  });
+
+  return postElement;
+}
+
+function renderPost(post, postContainer) {
+  postContainer.prepend(post);
 }
 
 function deletePost(event) {
@@ -53,105 +71,106 @@ function deletePost(event) {
   deleteButtonPressed.closest('.post').remove();
 }
 
-function openPopupWithImage(event) {
-  popupImage.src = event.target.src;
-  popupCaption.textContent = event.target.nextElementSibling.children[0].textContent;
-  popupWithImage.style = 'transition: visibility .5s, opacity .5s linear;';
-  popupWithImage.classList.add('popup_opened');
+function changeReactionPost(event) {
+  const reactionPressed = event.target;
+  reactionPressed.classList.toggle('post__reaction_active');
 }
 
-function setPopup(popup) {
+function dropWarningInputs() {
+  listOfInputs.forEach((input) => {
+    dropWarningInput(input);
+  });
+}
+
+function submitForm(popup, event, name = null, description = null) {
+  event.preventDefault();
+  dropWarningInputs();
+
+  if (popup === popupEditProfile) {
+    name.textContent = inputNameProfile.value;
+    description.textContent = inputDescriptionProfile.value;
+  } else if (popup === popupAddPost) {
+    renderPost(createPost(inputNameMesto.value, inputUrlLink.value), postsList);
+    inputNameMesto.value = '';
+    inputUrlLink.value = '';
+  }
+
+  closePopup(popup)
+}
+
+function setPopup(popup, event = null) {
   const popupCloseButton = popup.querySelector('.popup__close-button');
-  const popupForm = popup.querySelector('.popup__form');
-  const input1 = popup.querySelectorAll('.popup__input-field')[0];
-  const input2 = popup.querySelectorAll('.popup__input-field')[1];
+
+  popup.style = "transition: visibility .5s, opacity .5s linear;"
 
   const name = document.querySelector('.profile__name');
   const description = document.querySelector('.profile__description');
 
-  if (popupForm !== null && popupForm.getAttribute('name') === 'edit_profile') {
-    input1.value = name.textContent;
-    input2.value = description.textContent;
-  }
-  if (popupForm !== null &&
-    (popupForm.getAttribute('name') === 'add_post' || popupForm.getAttribute('name') === 'edit_profile')) {
-    popup.style = "transition: visibility .5s, opacity .5s linear;"
+  if (popup === popupEditProfile) {
+    inputNameProfile.value = name.textContent;
+    inputDescriptionProfile.value = description.textContent;
+  } else if (popup === popupWithImage) {
+    popupImage.src = event.target.src;
+    popupCaption.textContent = event.target.parentElement.querySelector('.post__title').textContent;
   }
 
   popupCloseButton.addEventListener('click', () => {
-    popup.classList.remove('popup_opened');
+    dropWarningInputs();
+    closePopup(popup);
   })
-
-  if (popupForm !== null) {
-    popupForm.addEventListener('invalid', (event) => {
-      event.target.classList.add('popup__input-field_type_warning');
-    }, true);
-
-    popupForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      input1.classList.remove('popup__input-field_type_warning');
-      input2.classList.remove('popup__input-field_type_warning');
-
-      const newDataFromInput1 = popup.querySelectorAll('.popup__input-field')[0];
-      const newDataFromInput2 = popup.querySelectorAll('.popup__input-field')[1];
-
-      if (popupForm.getAttribute('name') === 'edit_profile') {
-        name.textContent = newDataFromInput1.value;
-        description.textContent = newDataFromInput2.value;
-      } else if (popupForm.getAttribute('name') === 'add_post') {
-        const postElement = postTemplate.querySelector('.post').cloneNode(true);
-
-        postElement.querySelector('.post__title').textContent = newDataFromInput1.value;
-        postElement.querySelector('.post__photo').src = newDataFromInput2.value;
-        postElement.querySelector('.post__reaction').addEventListener('click', changeReactionPost);
-        postElement.querySelector('.post__delete').addEventListener('click', deletePost);
-        postElement.querySelector('.post__photo').addEventListener('click', openPopupWithImage);
-
-        postsList.prepend(postElement);
-        newDataFromInput1.value = '';
-        newDataFromInput2.value = '';
-      }
-
-      popup.classList.remove('popup_opened');
-    });
-  }
-
-  if (input1 !== undefined && input2 !== undefined) {
-    input1.addEventListener('keypress', () => {
-      changeTypeInput(input1)
-    });
-    input2.addEventListener('keypress', () => {
-      changeTypeInput(input2)
-    })
-  }
 }
 
-function changeTypeInput(input) {
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened')
+}
+
+function setWarningInput(input) {
+  input.classList.add('popup__input-field_type_warning');
+}
+
+function dropWarningInput(input) {
   input.classList.remove('popup__input-field_type_warning');
 }
 
 initialCards.forEach((card) => {
-  const postElement = postTemplate.querySelector('.post').cloneNode(true);
-
-  postElement.querySelector('.post__photo').src = card.link;
-  postElement.querySelector('.post__title').textContent = card.name;
-  postElement.querySelector('.post__photo').addEventListener('click', openPopupWithImage);
-  postElement.querySelector('.post__reaction').addEventListener('click', changeReactionPost);
-  postElement.querySelector('.post__delete').addEventListener('click', deletePost);
-
-  postsList.append(postElement);
+  renderPost(createPost(card.name, card.link), postsList);
 });
 
 
 profileEditButton.addEventListener('click', () => {
-  setTimeout(() => {
-    popupEditProfile.classList.add('popup_opened');
-  });
-})
+  setPopup(popupEditProfile);
+  openPopup(popupEditProfile);
+});
 
 postAddButton.addEventListener('click', () => {
-  setTimeout(() => {
-    popupAddPost.classList.add('popup_opened');
-  });
+  setPopup(popupAddPost);
+  openPopup(popupAddPost);
 })
+
+popupFormAddPost.addEventListener('invalid', (event) => {
+  setWarningInput(event.target)
+}, true);
+
+popupFormAddPost.addEventListener('submit', (event) => {
+  submitForm(popupAddPost, event);
+});
+
+popupFormEditProfile.addEventListener('invalid', (event) => {
+  setWarningInput(event.target)
+}, true);
+
+popupFormEditProfile.addEventListener('submit', (event) => {
+  const name = document.querySelector('.profile__name');
+  const description = document.querySelector('.profile__description');
+  submitForm(popupEditProfile, event, name, description);
+});
+
+listOfInputs.forEach((input) => {
+  input.addEventListener('keypress', () => {
+    dropWarningInput(input)
+  });
+});
