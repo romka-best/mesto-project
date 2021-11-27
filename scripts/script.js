@@ -6,7 +6,9 @@ const postTemplate = document.querySelector('#post').content;
 const postsList = document.querySelector('.posts-list');
 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
+const popupCloseButtonEditProfile = document.querySelector('.popup__close-button_type_edit-profile');
 const popupAddPost = document.querySelector('.popup_type_add-post');
+const popupCloseButtonAddPost = document.querySelector('.popup__close-button_type_add-post');
 
 const inputNameProfile = document.querySelector('.popup__input-field_type_name-profile');
 const inputDescriptionProfile = document.querySelector('.popup__input-field_type_description-profile');
@@ -19,6 +21,7 @@ const popupFormAddPost = document.querySelector('.popup__form_type_add-post');
 const popupWithImage = document.querySelector('.popup-with-image');
 const popupImage = document.querySelector('.popup-with-image__image');
 const popupCaption = document.querySelector('.popup-with-image__figcaption');
+const popupCloseButtonWithImage = document.querySelector('.popup__close-button_type_with-image');
 
 const initialCards = [
   {
@@ -49,13 +52,18 @@ const initialCards = [
 
 function createPost(name, link) {
   const postElement = postTemplate.querySelector('.post').cloneNode(true);
+  const postPhoto = postElement.querySelector('.post__photo');
 
   postElement.querySelector('.post__title').textContent = name;
-  postElement.querySelector('.post__photo').src = link;
+  postPhoto.src = link;
+  postPhoto.alt = 'Картинка поста';
   postElement.querySelector('.post__reaction').addEventListener('click', changeReactionPost);
   postElement.querySelector('.post__delete').addEventListener('click', deletePost);
-  postElement.querySelector('.post__photo').addEventListener('click', (event) => {
-    setPopup(popupWithImage, event);
+  postPhoto.addEventListener('click', (event) => {
+    popupImage.src = event.target.src;
+    popupImage.alt = 'Картинка поста';
+    popupCaption.textContent = event.target.parentElement.querySelector('.post__title').textContent;
+
     openPopup(popupWithImage);
   });
 
@@ -82,42 +90,27 @@ function dropWarningInputs() {
   });
 }
 
-function submitForm(popup, event, name = null, description = null) {
+function submitFormEditProfile(event) {
   event.preventDefault();
-  dropWarningInputs();
-
-  if (popup === popupEditProfile) {
-    name.textContent = inputNameProfile.value;
-    description.textContent = inputDescriptionProfile.value;
-  } else if (popup === popupAddPost) {
-    renderPost(createPost(inputNameMesto.value, inputUrlLink.value), postsList);
-    inputNameMesto.value = '';
-    inputUrlLink.value = '';
-  }
-
-  closePopup(popup)
-}
-
-function setPopup(popup, event = null) {
-  const popupCloseButton = popup.querySelector('.popup__close-button');
-
-  popup.style = "transition: visibility .5s, opacity .5s linear;"
-
   const name = document.querySelector('.profile__name');
   const description = document.querySelector('.profile__description');
 
-  if (popup === popupEditProfile) {
-    inputNameProfile.value = name.textContent;
-    inputDescriptionProfile.value = description.textContent;
-  } else if (popup === popupWithImage) {
-    popupImage.src = event.target.src;
-    popupCaption.textContent = event.target.parentElement.querySelector('.post__title').textContent;
-  }
+  dropWarningInputs();
+  name.textContent = inputNameProfile.value;
+  description.textContent = inputDescriptionProfile.value;
+  popupFormEditProfile.reset();
 
-  popupCloseButton.addEventListener('click', () => {
-    dropWarningInputs();
-    closePopup(popup);
-  })
+  closePopup(popupEditProfile)
+}
+
+function submitFormAddPost(event) {
+  event.preventDefault();
+
+  dropWarningInputs();
+  renderPost(createPost(inputNameMesto.value, inputUrlLink.value), postsList);
+  popupFormAddPost.reset();
+
+  closePopup(popupAddPost)
 }
 
 function openPopup(popup) {
@@ -142,12 +135,16 @@ initialCards.forEach((card) => {
 
 
 profileEditButton.addEventListener('click', () => {
-  setPopup(popupEditProfile);
+  const name = document.querySelector('.profile__name');
+  const description = document.querySelector('.profile__description');
+
+  inputNameProfile.value = name.textContent;
+  inputDescriptionProfile.value = description.textContent;
+
   openPopup(popupEditProfile);
 });
 
 postAddButton.addEventListener('click', () => {
-  setPopup(popupAddPost);
   openPopup(popupAddPost);
 })
 
@@ -156,7 +153,7 @@ popupFormAddPost.addEventListener('invalid', (event) => {
 }, true);
 
 popupFormAddPost.addEventListener('submit', (event) => {
-  submitForm(popupAddPost, event);
+  submitFormAddPost(event);
 });
 
 popupFormEditProfile.addEventListener('invalid', (event) => {
@@ -164,9 +161,22 @@ popupFormEditProfile.addEventListener('invalid', (event) => {
 }, true);
 
 popupFormEditProfile.addEventListener('submit', (event) => {
-  const name = document.querySelector('.profile__name');
-  const description = document.querySelector('.profile__description');
-  submitForm(popupEditProfile, event, name, description);
+  submitFormEditProfile(event);
+});
+
+popupCloseButtonEditProfile.addEventListener('click', () => {
+  dropWarningInputs();
+  closePopup(popupEditProfile);
+});
+
+popupCloseButtonAddPost.addEventListener('click', () => {
+  dropWarningInputs();
+  closePopup(popupAddPost);
+});
+
+popupCloseButtonWithImage.addEventListener('click', () => {
+  dropWarningInputs();
+  closePopup(popupWithImage);
 });
 
 listOfInputs.forEach((input) => {
@@ -174,3 +184,7 @@ listOfInputs.forEach((input) => {
     dropWarningInput(input)
   });
 });
+
+window.onload = function () {
+  document.querySelector('.page').classList.remove("page_without-transition");
+};
