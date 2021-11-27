@@ -4,6 +4,7 @@
 @import url(../blocks/html-page/html-page.css);
 
 @import url(../blocks/page/page.css);
+@import url(../blocks/page/_without-transition/page_without-transition.css);
 
 @import url(../blocks/popup/popup.css);
 @import url(../blocks/popup/__container/popup__container.css);

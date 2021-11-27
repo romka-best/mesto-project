@@ -7,7 +7,7 @@
   <link rel="icon" href="images/logo-color-black.svg">
   <link rel="stylesheet" href="pages/index.css">
 </head>
-<body class="page">
+<body class="page page_without-transition">
 <header class="header">
   <a href="#" class="header__logo"></a>
 </header>
@@ -31,7 +31,7 @@
 </footer>
 <div class="popup popup_type_edit-profile">
   <div class="popup__container">
-    <button class="popup__close-button" type="button"></button>
+    <button class="popup__close-button popup__close-button_type_edit-profile" type="button"></button>
     <form class="popup__form popup__form_type_edit-profile" name="edit_profile">
       <h2 class="popup__title">Редактировать профиль</h2>
       <input type="text" class="popup__input-field popup__input-field_type_name-profile" name="name"
@@ -44,7 +44,7 @@
 </div>
 <div class="popup popup_type_add-post">
   <div class="popup__container">
-    <button class="popup__close-button" type="button"></button>
+    <button class="popup__close-button popup__close-button_type_add-post" type="button"></button>
     <form class="popup__form popup__form_type_add-post" name="add_post">
       <h2 class="popup__title">Новое место</h2>
       <input type="text" class="popup__input-field popup__input-field_type_name-mesto" name="name"
@@ -57,9 +57,9 @@
 </div>
 <div class="popup-with-image">
   <div class="popup-with-image__container">
-    <button class="popup__close-button" type="button"></button>
+    <button class="popup__close-button popup__close-button_type_with-image" type="button"></button>
     <figure class="popup-with-image__figure">
-      <img alt="Картинка поста" class="popup-with-image__image">
+      <img class="popup-with-image__image">
       <figcaption class="popup-with-image__figcaption"></figcaption>
     </figure>
   </div>
@@ -67,7 +67,7 @@
 <template id="post">
   <li class="post">
     <button class="post__delete" type="button"></button>
-    <img alt="Картинка поста" class="post__photo">
+    <img class="post__photo">
     <div class="post__info">
       <h2 class="post__title"></h2>
       <button class="post__reaction" type="button"></button>
