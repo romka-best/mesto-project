@@ -7,6 +7,10 @@
   position: relative;
 }
 
+.popup__container:hover {
+  cursor: auto;
+}
+
 @media screen and (max-width: 680px) {
   .popup__container {
     margin: 0 1.9rem;

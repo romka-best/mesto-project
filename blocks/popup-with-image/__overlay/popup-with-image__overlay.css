@@ -1,0 +1,14 @@
+.popup-with-image__overlay {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.popup-with-image__overlay:hover {
+  cursor: pointer;
+}

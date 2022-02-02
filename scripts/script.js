@@ -7,8 +7,10 @@ const postsList = document.querySelector('.posts-list');
 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupCloseButtonEditProfile = document.querySelector('.popup__close-button_type_edit-profile');
+const popupOverlayEditProfile = document.querySelector('.popup__overlay_type_edit-profile');
 const popupAddPost = document.querySelector('.popup_type_add-post');
 const popupCloseButtonAddPost = document.querySelector('.popup__close-button_type_add-post');
+const popupOverlayAddPost = document.querySelector('.popup__overlay_type_add-post');
 
 const inputNameProfile = document.querySelector('.popup__input-field_type_name-profile');
 const inputDescriptionProfile = document.querySelector('.popup__input-field_type_description-profile');
@@ -21,6 +23,9 @@ const popupWithImage = document.querySelector('.popup-with-image');
 const popupImage = document.querySelector('.popup-with-image__image');
 const popupCaption = document.querySelector('.popup-with-image__figcaption');
 const popupCloseButtonWithImage = document.querySelector('.popup__close-button_type_with-image');
+const popupOverlayWithImage = document.querySelector('.popup-with-image__overlay');
+
+const popups = [popupAddPost, popupEditProfile, popupWithImage];
 
 const initialCards = [
   {
@@ -168,13 +173,44 @@ popupCloseButtonEditProfile.addEventListener('click', () => {
   closePopup(popupEditProfile);
 });
 
+popupOverlayEditProfile.addEventListener('click', (evt) => {
+  if (evt.target.classList.contains('popup__overlay') && !evt.target.classList.contains('popup__container')) {
+    dropErrorInputs(popupEditProfile);
+    closePopup(popupEditProfile);
+  }
+});
+
 popupCloseButtonAddPost.addEventListener('click', () => {
   dropErrorInputs(popupAddPost);
   closePopup(popupAddPost);
 });
 
+popupOverlayAddPost.addEventListener('click', (evt) => {
+  if (evt.target.classList.contains('popup__overlay') && !evt.target.classList.contains('popup__container')) {
+    dropErrorInputs(popupAddPost);
+    closePopup(popupAddPost);
+  }
+});
+
 popupCloseButtonWithImage.addEventListener('click', () => {
   closePopup(popupWithImage);
+});
+
+popupOverlayWithImage.addEventListener('click', (evt) => {
+  if (evt.target.classList.contains('popup-with-image__overlay') && !evt.target.classList.contains('popup__container')) {
+    closePopup(popupWithImage);
+  }
+});
+
+document.addEventListener('keydown', (evt) => {
+  if (evt.code === 'Escape') {
+    popups.forEach((popup) => {
+      if (popup.classList.contains('popup_opened')) {
+        closePopup(popup)
+      }
+    });
+  }
+
 });
 
 const showInputError = (formElement, inputElement, errorMessage) => {
@@ -227,7 +263,7 @@ const enableValidation = () => {
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
-  })
+  });
 }
 
 const toggleButtonState = (inputList, buttonElement) => {
