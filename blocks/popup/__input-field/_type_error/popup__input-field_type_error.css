@@ -1,0 +1,7 @@
+.popup__input-field_type_error {
+  border-bottom: .1rem solid #f00;
+}
+
+.popup__input-field_type_error:focus {
+  border-bottom: .1rem solid #f00;
+}

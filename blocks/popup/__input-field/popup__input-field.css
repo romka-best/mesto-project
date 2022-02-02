@@ -1,4 +1,6 @@
 .popup__input-field {
+  width: 100%;
+
   outline: none;
   border: 0;
   border-bottom: 0.1rem solid rgba(0, 0, 0, 0.2);
@@ -13,8 +15,4 @@
 
 .popup__input-field:focus {
   border-bottom: 0.1rem solid rgba(0, 0, 0, 1);
-}
-
-.popup__input-field:not(:last-of-type) {
-  margin-bottom: 3rem;
 }
