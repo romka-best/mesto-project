@@ -1,7 +1,4 @@
 .popup__close-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
   background-image: url('../../../images/close-icon.svg');
   background-repeat: no-repeat;
   background-size: cover;

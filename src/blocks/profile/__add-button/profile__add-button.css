@@ -1,7 +1,4 @@
 .profile__add-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
   background-image: url('../../../images/add-button.svg');
   background-size: 2.2rem;
   background-repeat: no-repeat;
