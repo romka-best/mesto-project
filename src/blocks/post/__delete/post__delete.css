@@ -1,7 +1,4 @@
 .post__delete {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
   background-image: url('../../../images/post-delete-button.svg');
   background-repeat: no-repeat;
   background-size: cover;

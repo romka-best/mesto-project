@@ -1,7 +1,4 @@
 .post__reaction {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
   background-image: url('../../../images/post-reaction.svg');
   background-repeat: no-repeat;
   background-size: cover;

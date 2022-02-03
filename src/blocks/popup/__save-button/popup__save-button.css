@@ -1,7 +1,4 @@
 .popup__save-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
   background-color: #000;
   color: #fff;
   font-size: 1.8rem;

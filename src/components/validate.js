@@ -56,9 +56,11 @@ const hasInvalidInput = (inputList) => {
 const toggleButtonState = (settings, inputList, buttonElement) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(settings.inactiveButtonClass);
+    buttonElement.setAttribute('disabled', 'disabled');
   } else {
     buttonElement.classList.remove(settings.inactiveButtonClass);
+    buttonElement.removeAttribute('disabled');
   }
 }
 
-export {enableValidation, hideInputError, hasInvalidInput, checkInputValidity}
+export {enableValidation, toggleButtonState, hideInputError}

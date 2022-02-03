@@ -2,14 +2,25 @@
 
 import '../pages/index.css';
 
-import {enableValidation} from './validate.js';
-import {openPopup, popupAddPost, popupEditProfile, setValuesEditProfilePopup} from './modal.js';
+import {enableValidation, toggleButtonState} from './validate.js';
+import {
+  openPopup,
+  popupAddPost,
+  popupEditProfile,
+  popupFormEditProfile,
+  popupSubmitButtonEditProfile,
+  inputNameProfile,
+  inputDescriptionProfile,
+  setValuesEditProfilePopup,
+  dropErrorInputs
+} from './modal.js';
 import {initializeCards} from "./card.js";
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const postAddButton = document.querySelector('.profile__add-button');
 
 initializeCards();
+setValuesEditProfilePopup();
 
 enableValidation({
   formSelector: '.popup__form',
@@ -22,16 +33,20 @@ enableValidation({
 });
 
 profileEditButton.addEventListener('click', () => {
-  setValuesEditProfilePopup({
-    nameSelector: '.profile__name',
-    descriptionSelector: '.profile__description'
-  });
+  setValuesEditProfilePopup();
+  dropErrorInputs(popupFormEditProfile);
+  toggleButtonState(
+    {
+      inactiveButtonClass: 'popup__save-button_inactive'
+    }, [inputNameProfile, inputDescriptionProfile],
+    popupSubmitButtonEditProfile
+  );
   openPopup(popupEditProfile);
 });
 
 postAddButton.addEventListener('click', () => {
   openPopup(popupAddPost);
-})
+});
 
 window.onload = function () {
   document.querySelector('.page').classList.remove("page_without-transition");

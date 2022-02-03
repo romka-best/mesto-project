@@ -44,14 +44,14 @@ const createPost = (name, link) => {
 
   postElement.querySelector('.post__title').textContent = name;
   postPhoto.src = link;
-  postPhoto.alt = 'Картинка поста';
+  postPhoto.alt = name;
   postElement.querySelector('.post__reaction').addEventListener('click', changeReactionPost);
   postElement.querySelector('.post__delete').addEventListener('click', deletePost);
   postPhoto.addEventListener('click', (event) => {
     setSettingsImagePopup({
       src: event.target.src,
-      alt: 'Картинка поста',
-      textContent: event.target.parentElement.querySelector('.post__title').textContent
+      alt: name,
+      textContent: name
     });
   });
 
