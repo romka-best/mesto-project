@@ -2,13 +2,17 @@
 
 import '../pages/index.css';
 
-import {enableValidation} from './validate.js';
+import {enableValidation, toggleButtonState} from './validate.js';
 import {
   openPopup,
   popupAddPost,
   popupEditProfile,
   popupFormEditProfile,
-  setValuesEditProfilePopup, dropErrorInputs
+  popupSubmitButtonEditProfile,
+  inputNameProfile,
+  inputDescriptionProfile,
+  setValuesEditProfilePopup,
+  dropErrorInputs
 } from './modal.js';
 import {initializeCards} from "./card.js";
 
@@ -31,6 +35,12 @@ enableValidation({
 profileEditButton.addEventListener('click', () => {
   setValuesEditProfilePopup();
   dropErrorInputs(popupFormEditProfile);
+  toggleButtonState(
+    {
+      inactiveButtonClass: 'popup__save-button_inactive'
+    }, [inputNameProfile, inputDescriptionProfile],
+    popupSubmitButtonEditProfile
+  );
   openPopup(popupEditProfile);
 });
 

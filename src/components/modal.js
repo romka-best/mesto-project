@@ -18,6 +18,7 @@ const inputUrlLink = document.querySelector('.popup__input-field_type_url-link')
 const popupFormEditProfile = document.querySelector('.popup__form_type_edit-profile');
 const popupFormAddPost = document.querySelector('.popup__form_type_add-post');
 
+const popupSubmitButtonEditProfile = popupFormEditProfile.querySelector('.popup__save-button');
 const popupSubmitButtonAddPost = popupFormAddPost.querySelector('.popup__save-button');
 
 const popupWithImage = document.querySelector('.popup-with-image');
@@ -105,12 +106,6 @@ const submitFormAddPost = (event) => {
 
   renderPost(createPost(inputNameMesto.value, inputUrlLink.value), postsList);
   resetFormPopup(event.target);
-  toggleButtonState({
-      inactiveButtonClass: 'popup__save-button_inactive'
-    },
-    [inputNameMesto, inputUrlLink],
-    popupSubmitButtonAddPost
-  );
 
   closePopup(popupAddPost);
 }
@@ -123,11 +118,23 @@ popupFormEditProfile.addEventListener('submit', (event) => {
   submitFormEditProfile(event);
 });
 
+popupAddPost.addEventListener('transitionend', () => {
+  toggleButtonState({
+      inactiveButtonClass: 'popup__save-button_inactive'
+    },
+    [inputNameMesto, inputUrlLink],
+    popupSubmitButtonAddPost
+  );
+});
+
 export {
   openPopup,
   popupAddPost,
   popupEditProfile,
   popupWithImage,
+  inputNameProfile,
+  inputDescriptionProfile,
+  popupSubmitButtonEditProfile,
   popupFormEditProfile,
   setValuesEditProfilePopup,
   setSettingsImagePopup,
