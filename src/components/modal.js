@@ -35,7 +35,17 @@ const openPopup = (popup) => {
 }
 
 const closePopup = (popup) => {
-  popup.classList.remove('popup_opened')
+  document.removeEventListener('keydown', checkCloseWithEscape);
+  resetFormPopup(popup);
+  popup.classList.remove('popup_opened');
+}
+
+const resetFormPopup = (popup) => {
+  if (popup.classList.contains('popup_type_add-post')) {
+    popupFormAddPost.reset();
+  } else if (popup.classList.contains('popup_type_edit-profile')) {
+    popupFormEditProfile.reset();
+  }
 }
 
 const setSettingsImagePopup = (settings) => {
@@ -88,7 +98,6 @@ const submitFormEditProfile = (event) => {
 
     name.textContent = inputNameProfile.value;
     description.textContent = inputDescriptionProfile.value;
-    popupFormEditProfile.reset();
 
     closePopup(popupEditProfile)
   }
@@ -105,7 +114,6 @@ const submitFormAddPost = (event) => {
     });
   } else {
     renderPost(createPost(inputNameMesto.value, inputUrlLink.value), postsList);
-    popupFormAddPost.reset();
 
     closePopup(popupAddPost);
   }

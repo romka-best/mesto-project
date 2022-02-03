@@ -1,4 +1,7 @@
 "use strict";
+
+import '../pages/index.css';
+
 import {enableValidation} from './validate.js';
 import {openPopup, popupAddPost, popupEditProfile, setValuesEditProfilePopup} from './modal.js';
 import {initializeCards} from "./card.js";
