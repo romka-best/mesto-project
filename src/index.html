@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru" class="html-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesto</title>
+  <link rel="icon" href="<%=require('./images/logo-color-black.svg')%>">
+</head>
+<body class="page page_without-transition">
+<header class="header">
+  <a href="#" class="header__logo"></a>
+</header>
+<main>
+  <section class="profile">
+    <img src="<%=require('./images/profile-photo.jpg')%>" alt="Аватарка профиля" class="profile__avatar"/>
+    <div class="profile__info">
+      <h1 class="profile__name">Жак-Ив Кусто</h1>
+      <p class="profile__description">Исследователь океана</p>
+      <button class="profile__edit-button" type="button"></button>
+    </div>
+    <button class="profile__add-button" type="button"></button>
+  </section>
+  <section class="posts">
+    <ul class="posts-list">
+    </ul>
+  </section>
+</main>
+<footer class="footer">
+  <p class="footer__copyright">© 2021 Mesto Russia</p>
+</footer>
+<div class="popup popup_type_edit-profile">
+  <div class="popup__overlay popup__overlay_type_edit-profile">
+    <div class="popup__container">
+      <button class="popup__close-button popup__close-button_type_edit-profile" type="button"></button>
+      <form class="popup__form popup__form_type_edit-profile" name="edit_profile" novalidate>
+        <fieldset class="popup__fieldset popup__fieldset_type_edit-profile">
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <label class="popup__field">
+            <input type="text" class="popup__input-field popup__input-field_type_name-profile" name="name"
+                   id="name-profile" minlength="2" maxlength="40"
+                   placeholder="Ваше имя" required>
+            <span class="popup__input-field-error name-profile-input-error"></span>
+          </label>
+          <label class="popup__field">
+            <input type="text" class="popup__input-field popup__input-field_type_description-profile" name="description"
+                   id="description" minlength="2" maxlength="200"
+                   placeholder="Ваша деятельность" required>
+            <span class="popup__input-field-error description-input-error"></span>
+          </label>
+          <button type="submit" class="popup__save-button">Сохранить</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="popup popup_type_add-post">
+  <div class="popup__overlay popup__overlay_type_add-post">
+    <div class="popup__container">
+      <button class="popup__close-button popup__close-button_type_add-post" type="button"></button>
+      <form class="popup__form popup__form_type_add-post" name="add_post" novalidate>
+        <fieldset class="popup__fieldset popup__fieldset_type_add-post">
+          <h2 class="popup__title">Новое место</h2>
+          <label class="popup__field">
+            <input type="text" class="popup__input-field popup__input-field_type_name-mesto" name="name" id="name-mesto"
+                   placeholder="Название" minlength="2" maxlength="30" required>
+            <span class="popup__input-field-error name-mesto-input-error"></span>
+          </label>
+          <label class="popup__field">
+            <input type="url" class="popup__input-field popup__input-field_type_url-link" name="url" id="url-link"
+                   placeholder="Ссылка на картинку" required>
+            <span class="popup__input-field-error url-link-input-error"></span>
+          </label>
+          <button type="submit" class="popup__save-button">Сохранить</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="popup-with-image">
+  <div class="popup-with-image__overlay">
+    <div class="popup-with-image__container">
+      <button class="popup__close-button popup__close-button_type_with-image" type="button"></button>
+      <figure class="popup-with-image__figure">
+        <img class="popup-with-image__image">
+        <figcaption class="popup-with-image__figcaption"></figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+<template id="post">
+  <li class="post">
+    <button class="post__delete" type="button"></button>
+    <img class="post__photo">
+    <div class="post__info">
+      <h2 class="post__title"></h2>
+      <button class="post__reaction" type="button"></button>
+    </div>
+  </li>
+</template>
+</body>
+</html>

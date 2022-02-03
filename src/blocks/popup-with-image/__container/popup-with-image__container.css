@@ -1,0 +1,7 @@
+.popup-with-image__container {
+  position: relative;
+}
+
+.popup-with-image__container:hover {
+  cursor: auto;
+}

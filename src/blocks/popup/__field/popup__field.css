@@ -1,0 +1,7 @@
+.popup__field {
+  position: relative;
+}
+
+.popup__field:not(:first-of-type) {
+  margin-top: 3rem;
+}
