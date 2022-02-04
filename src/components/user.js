@@ -30,4 +30,23 @@ const getUserInfo = () => {
     });
 }
 
-export {initializeUser, profileName, profileDescription};
+const editUserInfo = (newUserInfo) => {
+  return fetch(
+    SERVER_URL + '/users/me',
+    {
+      method: 'PATCH',
+      headers: {
+        authorization: AUTHORIZATION_HEADER,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: newUserInfo.name,
+        about: newUserInfo.about
+      })
+    })
+    .catch((err) => {
+      console.log(`Ошибка ${err}. Запрос не выполнен :(`);
+    });
+}
+
+export {initializeUser, editUserInfo, profileName, profileDescription};

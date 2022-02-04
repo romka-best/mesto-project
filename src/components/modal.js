@@ -2,7 +2,7 @@
 
 import {toggleButtonState, hideInputError} from './validate.js';
 import {renderPost, createPost, postsList} from './card.js';
-import {profileName, profileDescription} from './user.js';
+import {profileName, profileDescription, editUserInfo} from './user.js';
 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 
@@ -93,10 +93,18 @@ const dropErrorInputs = (formElement) => {
 const submitFormEditProfile = (event) => {
   event.preventDefault();
 
-  profileName.textContent = inputNameProfile.value;
-  profileDescription.textContent = inputDescriptionProfile.value;
+  const newUserInfo = {
+    name: inputNameProfile.value,
+    about: inputDescriptionProfile.value
+  }
 
-  closePopup(popupEditProfile);
+  editUserInfo(newUserInfo).then((result) => {
+    if (result.ok) {
+      profileName.textContent = newUserInfo.name;
+      profileDescription.textContent = newUserInfo.about;
+      closePopup(popupEditProfile);
+    }
+  });
 }
 
 const submitFormAddPost = (event) => {
