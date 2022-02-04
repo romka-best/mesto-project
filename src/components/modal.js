@@ -106,6 +106,12 @@ const submitFormAddPost = (event) => {
 
   renderPost(createPost(inputNameMesto.value, inputUrlLink.value), postsList);
   resetFormPopup(event.target);
+  toggleButtonState({
+      inactiveButtonClass: 'popup__save-button_inactive'
+    },
+    [inputNameMesto, inputUrlLink],
+    popupSubmitButtonAddPost
+  );
 
   closePopup(popupAddPost);
 }
@@ -116,15 +122,6 @@ popupFormAddPost.addEventListener('submit', (event) => {
 
 popupFormEditProfile.addEventListener('submit', (event) => {
   submitFormEditProfile(event);
-});
-
-popupAddPost.addEventListener('transitionend', () => {
-  toggleButtonState({
-      inactiveButtonClass: 'popup__save-button_inactive'
-    },
-    [inputNameMesto, inputUrlLink],
-    popupSubmitButtonAddPost
-  );
 });
 
 export {
