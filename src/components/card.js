@@ -1,41 +1,31 @@
 "use strict";
 
-import {setSettingsImagePopup} from "./modal.js";
+import {setSettingsImagePopup} from './modal.js';
+import {SERVER_URL, AUTHORIZATION_HEADER} from './utils.js'
 
 const postTemplate = document.querySelector('#post').content;
 const postsList = document.querySelector('.posts-list');
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
 const initializeCards = () => {
-  initialCards.forEach((card) => {
-    renderPost(createPost(card.name, card.link), postsList);
-  });
+  getCards()
+    .then((cards) => cards.forEach((card) => {
+        renderPost(createPost(card.name, card.link), postsList);
+      })
+    );
+}
+
+const getCards = () => {
+  return fetch(
+    SERVER_URL + '/cards',
+    {
+      headers: {
+        authorization: AUTHORIZATION_HEADER
+      }
+    })
+    .then(res => res.json())
+    .catch((err) => {
+      console.log(`Ошибка ${err}. Запрос не выполнен :(`);
+    });
 }
 
 const createPost = (name, link) => {
