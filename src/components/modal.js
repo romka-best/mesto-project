@@ -2,7 +2,8 @@
 
 import {toggleButtonState, hideInputError} from './validate.js';
 import {renderPost, createPost, postsList} from './card.js';
-import {profileName, profileDescription, editUserInfo} from './user.js';
+import {profileName, profileDescription} from './user.js';
+import {editUserInfo, addCard} from './api.js';
 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 
@@ -98,28 +99,35 @@ const submitFormEditProfile = (event) => {
     about: inputDescriptionProfile.value
   }
 
-  editUserInfo(newUserInfo).then((result) => {
-    if (result.ok) {
+  editUserInfo(newUserInfo)
+    .then((newUserInfo) => {
       profileName.textContent = newUserInfo.name;
       profileDescription.textContent = newUserInfo.about;
       closePopup(popupEditProfile);
-    }
-  });
+    });
 }
 
 const submitFormAddPost = (event) => {
   event.preventDefault();
 
-  renderPost(createPost(inputNameMesto.value, inputUrlLink.value), postsList);
-  resetFormPopup(event.target);
-  toggleButtonState({
-      inactiveButtonClass: 'popup__save-button_inactive'
-    },
-    [inputNameMesto, inputUrlLink],
-    popupSubmitButtonAddPost
-  );
+  const newCard = {
+    name: inputNameMesto.value,
+    link: inputUrlLink.value
+  }
 
-  closePopup(popupAddPost);
+  addCard(newCard)
+    .then((newCard) => {
+      renderPost(createPost(newCard.name, newCard.link), postsList);
+      resetFormPopup(event.target);
+      toggleButtonState({
+          inactiveButtonClass: 'popup__save-button_inactive'
+        },
+        [inputNameMesto, inputUrlLink],
+        popupSubmitButtonAddPost
+      );
+
+      closePopup(popupAddPost);
+    })
 }
 
 popupFormAddPost.addEventListener('submit', (event) => {

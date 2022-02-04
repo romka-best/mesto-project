@@ -1,7 +1,7 @@
 "use strict";
 
 import {setSettingsImagePopup} from './modal.js';
-import {SERVER_URL, AUTHORIZATION_HEADER} from './utils.js'
+import {getCards} from './api.js';
 
 const postTemplate = document.querySelector('#post').content;
 const postsList = document.querySelector('.posts-list');
@@ -12,20 +12,6 @@ const initializeCards = () => {
         renderPost(createPost(card.name, card.link), postsList);
       })
     );
-}
-
-const getCards = () => {
-  return fetch(
-    SERVER_URL + '/cards',
-    {
-      headers: {
-        authorization: AUTHORIZATION_HEADER
-      }
-    })
-    .then(res => res.json())
-    .catch((err) => {
-      console.log(`Ошибка ${err}. Запрос не выполнен :(`);
-    });
 }
 
 const createPost = (name, link) => {
