@@ -1,3 +1,5 @@
+"use strict";
+
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-6',
   headers: {
@@ -84,4 +86,22 @@ const addCard = (newCard) => {
     });
 }
 
-export {getUserInfo, editUserInfo, getCards, addCard};
+const deleteCard = (cardId) => {
+  return fetch(
+    `${config.baseUrl}/cards/${cardId}`,
+    {
+      method: 'DELETE',
+      headers: config.headers
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export {getUserInfo, editUserInfo, getCards, addCard, deleteCard};

@@ -45,6 +45,7 @@
 @import url(../blocks/post/__title/post__title.css);
 @import url(../blocks/post/__photo/post__photo.css);
 @import url(../blocks/post/__delete/post__delete.css);
+@import url(../blocks/post/__delete/_active/post__delete_active.css);
 @import url(../blocks/post/__likes-container/post__likes-container.css);
 @import url(../blocks/post/__button-like/post__button-like.css);
 @import url(../blocks/post/__button-like/_active/post__button-like_active.css);

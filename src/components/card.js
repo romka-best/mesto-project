@@ -1,7 +1,8 @@
 "use strict";
 
 import {setSettingsImagePopup} from './modal.js';
-import {getCards} from './api.js';
+import {getCards, deleteCard} from './api.js';
+import {userId} from './user.js';
 
 const postTemplate = document.querySelector('#post').content;
 const postsList = document.querySelector('.posts-list');
@@ -9,21 +10,28 @@ const postsList = document.querySelector('.posts-list');
 const initializeCards = () => {
   getCards()
     .then((cards) => cards.forEach((card) => {
-        renderPost(createPost(card.name, card.link, card.likes.length), postsList);
-      })
+          renderPost(createPost(card.name, card.link, card.likes.length, card._id, card.owner._id), postsList);
+        }
+      )
     );
 }
 
-const createPost = (name, link, countLikes) => {
+const createPost = (name, link, countLikes, cardId, ownerId) => {
   const postElement = postTemplate.querySelector('.post').cloneNode(true);
   const postPhoto = postElement.querySelector('.post__photo');
 
+  postElement.id = cardId;
   postElement.querySelector('.post__title').textContent = name;
-  postPhoto.src = link;
-  postPhoto.alt = name;
   postElement.querySelector('.post__count-likes').textContent = countLikes;
   postElement.querySelector('.post__button-like').addEventListener('click', changeReactionPost);
-  postElement.querySelector('.post__delete').addEventListener('click', deletePost);
+  if (ownerId === userId) {
+    const deleteButton = postElement.querySelector('.post__delete');
+    deleteButton.classList.add('post__delete_active');
+    deleteButton.addEventListener('click', deletePost);
+  }
+
+  postPhoto.src = link;
+  postPhoto.alt = name;
   postPhoto.addEventListener('click', (event) => {
     setSettingsImagePopup({
       src: event.target.src,
@@ -40,8 +48,11 @@ const renderPost = (post, postContainer) => {
 }
 
 const deletePost = (event) => {
-  const deleteButtonPressed = event.target;
-  deleteButtonPressed.closest('.post').remove();
+  const deletePost = event.target.closest('.post');
+
+  deleteCard(deletePost.id).then(() => {
+    deletePost.remove();
+  });
 }
 
 const changeReactionPost = (event) => {
@@ -49,4 +60,4 @@ const changeReactionPost = (event) => {
   reactionPressed.classList.toggle('post__button-like_active');
 }
 
-export {initializeCards, renderPost, createPost, postsList}
+export {initializeCards, renderPost, createPost, postsList};
