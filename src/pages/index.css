@@ -45,8 +45,10 @@
 @import url(../blocks/post/__title/post__title.css);
 @import url(../blocks/post/__photo/post__photo.css);
 @import url(../blocks/post/__delete/post__delete.css);
-@import url(../blocks/post/__reaction/post__reaction.css);
-@import url(../blocks/post/__reaction/_active/post__reaction_active.css);
+@import url(../blocks/post/__likes-container/post__likes-container.css);
+@import url(../blocks/post/__button-like/post__button-like.css);
+@import url(../blocks/post/__button-like/_active/post__button-like_active.css);
+@import url(../blocks/post/__count-likes/post__count-likes.css);
 
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__copyright/footer__copyright.css);

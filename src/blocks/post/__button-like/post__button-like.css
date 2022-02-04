@@ -1,4 +1,4 @@
-.post__reaction {
+.post__button-like {
   background-image: url('../../../images/post-reaction.svg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -7,16 +7,15 @@
   border: none;
   background-color: transparent;
 
-  margin-left: 3rem;
-
   min-width: 2.2rem;
   min-height: 1.9rem;
   padding: 0;
+  margin-bottom: .3rem;
 
   transition: opacity linear .2s;
 }
 
-.post__reaction:hover {
+.post__button-like:hover {
   cursor: pointer;
   opacity: 50%;
 }

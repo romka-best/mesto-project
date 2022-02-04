@@ -117,7 +117,7 @@ const submitFormAddPost = (event) => {
 
   addCard(newCard)
     .then((newCard) => {
-      renderPost(createPost(newCard.name, newCard.link), postsList);
+      renderPost(createPost(newCard.name, newCard.link, 0), postsList);
       resetFormPopup(event.target);
       toggleButtonState({
           inactiveButtonClass: 'popup__save-button_inactive'
