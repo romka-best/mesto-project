@@ -14,11 +14,13 @@ import {
   setValuesEditProfilePopup,
   dropErrorInputs
 } from './modal.js';
-import {initializeCards} from "./card.js";
+import {initializeUser} from './user.js';
+import {initializeCards} from './card.js';
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const postAddButton = document.querySelector('.profile__add-button');
 
+initializeUser();
 initializeCards();
 setValuesEditProfilePopup();
 

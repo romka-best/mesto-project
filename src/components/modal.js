@@ -1,10 +1,8 @@
 "use strict";
 
-import {toggleButtonState, hideInputError} from "./validate.js";
-import {renderPost, createPost, postsList} from "./card.js";
-
-const profileName = document.querySelector('.profile__name');
-const profileDescription = document.querySelector('.profile__description');
+import {toggleButtonState, hideInputError} from './validate.js';
+import {renderPost, createPost, postsList} from './card.js';
+import {profileName, profileDescription} from './user.js';
 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 
