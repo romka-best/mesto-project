@@ -104,4 +104,40 @@ const deleteCard = (cardId) => {
     });
 }
 
-export {getUserInfo, editUserInfo, getCards, addCard, deleteCard};
+const putLikeOnCard = (cardId) => {
+  return fetch(
+    `${config.baseUrl}/cards/likes/${cardId}`,
+    {
+      method: 'PUT',
+      headers: config.headers
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+const deleteLikeOnCard = (cardId) => {
+  return fetch(
+    `${config.baseUrl}/cards/likes/${cardId}`,
+    {
+      method: 'DELETE',
+      headers: config.headers
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export {getUserInfo, editUserInfo, getCards, addCard, deleteCard, putLikeOnCard, deleteLikeOnCard};
