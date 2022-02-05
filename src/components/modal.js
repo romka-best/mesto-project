@@ -2,23 +2,26 @@
 
 import {toggleButtonState, hideInputError} from './validate.js';
 import {renderPost, createPost, postsList} from './card.js';
-import {profileName, profileDescription} from './user.js';
-import {editUserInfo, addCard} from './api.js';
+import {profileName, profileDescription, profileAvatar} from './user.js';
+import {editUserInfo, addCard, updateUserAvatar} from './api.js';
 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
-
 const popupAddPost = document.querySelector('.popup_type_add-post');
+const popupUpdateAvatar = document.querySelector('.popup_type_update-avatar');
 
 const inputNameProfile = document.querySelector('.popup__input-field_type_name-profile');
 const inputDescriptionProfile = document.querySelector('.popup__input-field_type_description-profile');
 const inputNameMesto = document.querySelector('.popup__input-field_type_name-mesto');
 const inputUrlLink = document.querySelector('.popup__input-field_type_url-link');
+const inputAvatarUrlLink = document.querySelector('.popup__input-field_type_avatar-url-link');
 
 const popupFormEditProfile = document.querySelector('.popup__form_type_edit-profile');
 const popupFormAddPost = document.querySelector('.popup__form_type_add-post');
+const popupFormUpdateAvatar = document.querySelector('.popup__form_type_update-avatar');
 
 const popupSubmitButtonEditProfile = popupFormEditProfile.querySelector('.popup__save-button');
 const popupSubmitButtonAddPost = popupFormAddPost.querySelector('.popup__save-button');
+const popupSubmitButtonUpdateProfile = popupFormUpdateAvatar.querySelector('.popup__save-button');
 
 const popupWithImage = document.querySelector('.popup-with-image');
 const popupImage = document.querySelector('.popup-with-image__image');
@@ -130,18 +133,31 @@ const submitFormAddPost = (event) => {
     })
 }
 
-popupFormAddPost.addEventListener('submit', (event) => {
-  submitFormAddPost(event);
-});
+const submitFormUpdateAvatar = (event) => {
+  event.preventDefault();
 
-popupFormEditProfile.addEventListener('submit', (event) => {
-  submitFormEditProfile(event);
-});
+  updateUserAvatar(inputAvatarUrlLink.value).then((newAvatarLink) => {
+    profileAvatar.src = newAvatarLink;
+    resetFormPopup(event.target);
+    toggleButtonState({
+        inactiveButtonClass: 'popup__save-button_inactive'
+      },
+      [inputAvatarUrlLink],
+      popupSubmitButtonUpdateProfile
+    );
+    closePopup(popupUpdateAvatar);
+  })
+}
+
+popupFormAddPost.addEventListener('submit', submitFormAddPost);
+popupFormEditProfile.addEventListener('submit', submitFormEditProfile);
+popupFormUpdateAvatar.addEventListener('submit', submitFormUpdateAvatar);
 
 export {
   openPopup,
   popupAddPost,
   popupEditProfile,
+  popupUpdateAvatar,
   popupWithImage,
   inputNameProfile,
   inputDescriptionProfile,

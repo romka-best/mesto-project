@@ -140,4 +140,25 @@ const deleteLikeOnCard = (cardId) => {
     });
 }
 
-export {getUserInfo, editUserInfo, getCards, addCard, deleteCard, putLikeOnCard, deleteLikeOnCard};
+const updateUserAvatar = (newAvatarLink) => {
+  return fetch(
+    `${config.baseUrl}/users/me/avatar`,
+    {
+      method: 'PATCH',
+      headers: config.headers,
+      body: JSON.stringify({
+        avatar: newAvatarLink
+      })
+    })
+    .then((res) => {
+      if (res.ok) {
+        return newAvatarLink;
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export {getUserInfo, editUserInfo, getCards, addCard, deleteCard, putLikeOnCard, deleteLikeOnCard, updateUserAvatar};

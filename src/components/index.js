@@ -7,6 +7,7 @@ import {
   openPopup,
   popupAddPost,
   popupEditProfile,
+  popupUpdateAvatar,
   popupFormEditProfile,
   popupSubmitButtonEditProfile,
   inputNameProfile,
@@ -14,7 +15,7 @@ import {
   setValuesEditProfilePopup,
   dropErrorInputs
 } from './modal.js';
-import {initializeUser} from './user.js';
+import {initializeUser, profileAvatar} from './user.js';
 import {initializeCards} from './card.js';
 
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -49,6 +50,11 @@ profileEditButton.addEventListener('click', () => {
 postAddButton.addEventListener('click', () => {
   openPopup(popupAddPost);
 });
+
+profileAvatar.addEventListener('click', () => {
+  openPopup(popupUpdateAvatar);
+});
+
 
 window.onload = function () {
   document.querySelector('.page').classList.remove("page_without-transition");

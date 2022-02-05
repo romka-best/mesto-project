@@ -10,7 +10,7 @@ const postsList = document.querySelector('.posts-list');
 const initializeCards = () => {
   getCards()
     .then((cards) => cards.forEach((card) => {
-          renderPost(createPost(card.name, card.link, card.likes.length, card._id, card.owner._id), postsList);
+          renderPost(createPost(card.name, card.link, card.likes, card._id, card.owner._id), postsList);
         }
       )
     );

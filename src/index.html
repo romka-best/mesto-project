@@ -12,7 +12,10 @@
 </header>
 <main>
   <section class="profile">
-    <img class="profile__avatar"/>
+    <div class="profile__container-avatar">
+      <img class="profile__avatar"/>
+      <button class="profile__avatar-edit-button"></button>
+    </div>
     <div class="profile__info">
       <h1 class="profile__name"></h1>
       <p class="profile__description"></p>
@@ -66,6 +69,23 @@
           <input type="url" class="popup__input-field popup__input-field_type_url-link" name="url" id="url-link"
                  placeholder="Ссылка на картинку" required>
           <span class="popup__input-field-error url-link-input-error"></span>
+        </label>
+        <button type="submit" class="popup__save-button">Сохранить</button>
+      </fieldset>
+    </form>
+  </div>
+</section>
+<section class="popup popup_type_update-avatar">
+  <div class="popup__container">
+    <button class="popup__close-button popup__close-button_type_update-avatar" type="button"></button>
+    <form class="popup__form popup__form_type_update-avatar" name="update-avatar" novalidate>
+      <fieldset class="popup__fieldset popup__fieldset_type_update-avatar">
+        <h2 class="popup__title">Обновить аватар</h2>
+        <label class="popup__field">
+          <input type="url" class="popup__input-field popup__input-field_type_avatar-url-link" name="url"
+                 id="avatar-url-link"
+                 placeholder="Ссылка на картинку" required>
+          <span class="popup__input-field-error avatar-url-link-input-error"></span>
         </label>
         <button type="submit" class="popup__save-button">Сохранить</button>
       </fieldset>

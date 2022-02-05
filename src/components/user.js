@@ -18,4 +18,4 @@ const initializeUser = () => {
     });
 }
 
-export {initializeUser, profileName, profileDescription, userId};
+export {initializeUser, profileName, profileDescription, profileAvatar, userId};
