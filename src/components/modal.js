@@ -107,7 +107,6 @@ const submitFormEditProfile = (event) => {
   event.preventDefault();
 
   popupSubmitButtonEditProfile.textContent = 'Сохранение...';
-  popupSubmitButtonEditProfile.removeEventListener()
 
   const newUserInfo = {
     name: inputNameProfile.value,
