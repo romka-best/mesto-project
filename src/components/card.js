@@ -1,6 +1,6 @@
 "use strict";
 
-import {setSettingsImagePopup} from './modal.js';
+import {setSettingsImagePopup, popupDeleteCard, openPopup, saveDataForPopup} from './modal.js';
 import {getCards, deleteCard, putLikeOnCard, deleteLikeOnCard} from './api.js';
 import {userId} from './user.js';
 
@@ -33,7 +33,10 @@ const createPost = (name, link, likes, cardId, ownerId) => {
   if (ownerId === userId) {
     const deleteButton = postElement.querySelector('.post__delete');
     deleteButton.classList.add('post__delete_active');
-    deleteButton.addEventListener('click', deletePost);
+    deleteButton.addEventListener('click', (event) => {
+      openPopup(popupDeleteCard);
+      saveDataForPopup(event);
+    });
   }
 
   postPhoto.src = link;
@@ -56,7 +59,7 @@ const renderPost = (post, postContainer) => {
 const deletePost = (event) => {
   const deletePost = event.target.closest('.post');
 
-  deleteCard(deletePost.id).then(() => {
+  return deleteCard(deletePost.id).then(() => {
     deletePost.remove();
   });
 }
@@ -82,4 +85,4 @@ const updateLikesOnPost = (postElement, countLikes) => {
   postElement.querySelector('.post__count-likes').textContent = countLikes;
 }
 
-export {initializeCards, renderPost, createPost, postsList};
+export {initializeCards, renderPost, createPost, deletePost, postsList};

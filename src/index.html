@@ -70,7 +70,7 @@
                  placeholder="Ссылка на картинку" required>
           <span class="popup__input-field-error url-link-input-error"></span>
         </label>
-        <button type="submit" class="popup__save-button">Сохранить</button>
+        <button type="submit" class="popup__save-button">Создать</button>
       </fieldset>
     </form>
   </div>
@@ -88,6 +88,17 @@
           <span class="popup__input-field-error avatar-url-link-input-error"></span>
         </label>
         <button type="submit" class="popup__save-button">Сохранить</button>
+      </fieldset>
+    </form>
+  </div>
+</section>
+<section class="popup popup_type_delete-card">
+  <div class="popup__container">
+    <button class="popup__close-button popup__close-button_type_delete-card" type="button"></button>
+    <form class="popup__form popup__form_type_delete-card" name="delete-card" novalidate>
+      <fieldset class="popup__fieldset popup__fieldset_type_delete-card">
+        <h2 class="popup__title popup__title_type_delete-card">Вы уверены?</h2>
+        <button type="submit" class="popup__save-button popup__save-button_type_delete-card">Да</button>
       </fieldset>
     </form>
   </div>
