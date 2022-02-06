@@ -1,52 +1,46 @@
 "use strict";
 
-import {setSettingsImagePopup} from "./modal.js";
+import {setSettingsImagePopup, popupDeleteCard, openPopup, saveDataForPopup} from './modal.js';
+import {getCards, deleteCard, putLikeOnCard, deleteLikeOnCard} from './api.js';
+import {userId} from './user.js';
 
 const postTemplate = document.querySelector('#post').content;
 const postsList = document.querySelector('.posts-list');
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
 const initializeCards = () => {
-  initialCards.forEach((card) => {
-    renderPost(createPost(card.name, card.link), postsList);
-  });
+  getCards()
+    .then((cards) => cards.forEach((card) => {
+          renderPost(createPost(card.name, card.link, card.likes, card._id, card.owner._id), postsList);
+        }
+      )
+    );
 }
 
-const createPost = (name, link) => {
+const createPost = (name, link, likes, cardId, ownerId) => {
   const postElement = postTemplate.querySelector('.post').cloneNode(true);
+  const buttonLikePost = postElement.querySelector('.post__button-like');
   const postPhoto = postElement.querySelector('.post__photo');
 
+  postElement.id = cardId;
   postElement.querySelector('.post__title').textContent = name;
+  if (likes.some((likeElement) => {
+    return likeElement._id === userId;
+  })) {
+    buttonLikePost.classList.add('post__button-like_active');
+  }
+  updateLikesOnPost(postElement, likes.length);
+  buttonLikePost.addEventListener('click', changeReactionPost);
+  if (ownerId === userId) {
+    const deleteButton = postElement.querySelector('.post__delete');
+    deleteButton.classList.add('post__delete_active');
+    deleteButton.addEventListener('click', (event) => {
+      openPopup(popupDeleteCard);
+      saveDataForPopup(event);
+    });
+  }
+
   postPhoto.src = link;
   postPhoto.alt = name;
-  postElement.querySelector('.post__reaction').addEventListener('click', changeReactionPost);
-  postElement.querySelector('.post__delete').addEventListener('click', deletePost);
   postPhoto.addEventListener('click', (event) => {
     setSettingsImagePopup({
       src: event.target.src,
@@ -63,13 +57,32 @@ const renderPost = (post, postContainer) => {
 }
 
 const deletePost = (event) => {
-  const deleteButtonPressed = event.target;
-  deleteButtonPressed.closest('.post').remove();
+  const deletePost = event.target.closest('.post');
+
+  return deleteCard(deletePost.id).then(() => {
+    deletePost.remove();
+  });
 }
 
 const changeReactionPost = (event) => {
+  const likePost = event.target.closest('.post');
   const reactionPressed = event.target;
-  reactionPressed.classList.toggle('post__reaction_active');
+
+  if (reactionPressed.classList.contains('post__button-like_active')) {
+    deleteLikeOnCard(likePost.id).then((result) => {
+      reactionPressed.classList.remove('post__button-like_active');
+      updateLikesOnPost(likePost, result.likes.length);
+    });
+  } else {
+    putLikeOnCard(likePost.id).then((result) => {
+      reactionPressed.classList.add('post__button-like_active');
+      updateLikesOnPost(likePost, result.likes.length);
+    });
+  }
 }
 
-export {initializeCards, renderPost, createPost, postsList}
+const updateLikesOnPost = (postElement, countLikes) => {
+  postElement.querySelector('.post__count-likes').textContent = countLikes;
+}
+
+export {initializeCards, renderPost, createPost, deletePost, postsList};

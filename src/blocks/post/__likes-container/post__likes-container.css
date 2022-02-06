@@ -1,0 +1,8 @@
+.post__likes-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-left: 1rem;
+}

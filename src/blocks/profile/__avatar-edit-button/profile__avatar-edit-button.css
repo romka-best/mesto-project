@@ -1,0 +1,27 @@
+.profile__avatar-edit-button {
+  opacity: 0;
+
+  background-image: url('../../../images/edit-button-without-borders.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  border: none;
+  background-color: transparent;
+
+  padding: 0;
+
+  position: absolute;
+  top: 4.6rem;
+  left: 4.6rem;
+
+  width: 2.6rem;
+  height: 2.6rem;
+
+  transition: opacity linear .2s;
+  pointer-events: none;
+}
+
+.profile__container-avatar:hover .profile__avatar-edit-button {
+  opacity: 1;
+}
