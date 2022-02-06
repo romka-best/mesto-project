@@ -15,14 +15,40 @@ import {
   setValuesEditProfilePopup,
   dropErrorInputs
 } from './modal.js';
-import {initializeUser, profileAvatar} from './user.js';
-import {initializeCards} from './card.js';
+import {profileAvatar, profileDescription, profileName} from './user.js';
+import {createPost, postsList, renderPost} from './card.js';
+import {getUserInfo, getCards, errorHandler} from './api.js';
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const postAddButton = document.querySelector('.profile__add-button');
 
-initializeUser();
-initializeCards();
+export let userId;
+
+function getUserInfoWithCards() {
+  Promise.all(
+    [
+      getUserInfo(),
+      getCards()
+    ]
+  )
+    .then(([userData, cardsArray]) => {
+      profileName.textContent = userData.name;
+      profileDescription.textContent = userData.about;
+      profileAvatar.alt = userData.name;
+      profileAvatar.src = userData.avatar;
+      userId = userData._id;
+
+      cardsArray.forEach((card) => {
+          const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = card;
+          const newPost = createPost({name, link, likes, cardId, ownerId});
+          renderPost(newPost, postsList);
+        }
+      )
+    })
+    .catch(errorHandler);
+}
+
+getUserInfoWithCards();
 setValuesEditProfilePopup();
 
 enableValidation({

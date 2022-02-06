@@ -1,22 +1,13 @@
 "use strict";
 
 import {setSettingsImagePopup, popupDeleteCard, openPopup, saveDataForPopup} from './modal.js';
-import {getCards, deleteCard, putLikeOnCard, deleteLikeOnCard} from './api.js';
-import {userId} from './user.js';
+import {deleteCard, putLikeOnCard, deleteLikeOnCard, errorHandler} from './api.js';
+import {userId} from './index.js';
 
 const postTemplate = document.querySelector('#post').content;
 const postsList = document.querySelector('.posts-list');
 
-const initializeCards = () => {
-  getCards()
-    .then((cards) => cards.forEach((card) => {
-          renderPost(createPost(card.name, card.link, card.likes, card._id, card.owner._id), postsList);
-        }
-      )
-    );
-}
-
-const createPost = (name, link, likes, cardId, ownerId) => {
+const createPost = ({name, link, likes, cardId, ownerId}) => {
   const postElement = postTemplate.querySelector('.post').cloneNode(true);
   const buttonLikePost = postElement.querySelector('.post__button-like');
   const postPhoto = postElement.querySelector('.post__photo');
@@ -59,9 +50,10 @@ const renderPost = (post, postContainer) => {
 const deletePost = (event) => {
   const deletePost = event.target.closest('.post');
 
-  return deleteCard(deletePost.id).then(() => {
-    deletePost.remove();
-  });
+  return deleteCard(deletePost.id)
+    .then(() => {
+      deletePost.remove();
+    })
 }
 
 const changeReactionPost = (event) => {
@@ -69,15 +61,19 @@ const changeReactionPost = (event) => {
   const reactionPressed = event.target;
 
   if (reactionPressed.classList.contains('post__button-like_active')) {
-    deleteLikeOnCard(likePost.id).then((result) => {
-      reactionPressed.classList.remove('post__button-like_active');
-      updateLikesOnPost(likePost, result.likes.length);
-    });
+    deleteLikeOnCard(likePost.id)
+      .then((result) => {
+        reactionPressed.classList.remove('post__button-like_active');
+        updateLikesOnPost(likePost, result.likes.length);
+      })
+      .catch(errorHandler);
   } else {
-    putLikeOnCard(likePost.id).then((result) => {
-      reactionPressed.classList.add('post__button-like_active');
-      updateLikesOnPost(likePost, result.likes.length);
-    });
+    putLikeOnCard(likePost.id)
+      .then((result) => {
+        reactionPressed.classList.add('post__button-like_active');
+        updateLikesOnPost(likePost, result.likes.length);
+      })
+      .catch(errorHandler);
   }
 }
 
@@ -85,4 +81,4 @@ const updateLikesOnPost = (postElement, countLikes) => {
   postElement.querySelector('.post__count-likes').textContent = countLikes;
 }
 
-export {initializeCards, renderPost, createPost, deletePost, postsList};
+export {renderPost, createPost, deletePost, postsList};
