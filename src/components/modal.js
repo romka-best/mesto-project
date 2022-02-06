@@ -3,7 +3,7 @@
 import {toggleButtonState, hideInputError} from './validate.js';
 import {renderPost, createPost, deletePost, postsList} from './card.js';
 import {profileName, profileDescription, profileAvatar} from './user.js';
-import {editUserInfo, addCard, updateUserAvatar} from './api.js';
+import {editUserInfo, addCard, updateUserAvatar, errorHandler} from './api.js';
 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddPost = document.querySelector('.popup_type_add-post');
@@ -72,6 +72,10 @@ const saveDataForPopup = (data) => {
   dataForPopup = data;
 }
 
+const changeTextOnSubmitButton = (buttonElement, text) => {
+  buttonElement.textContent = text;
+}
+
 const setSettingsImagePopup = (settings) => {
   popupImage.src = settings.src;
   popupImage.alt = settings.alt;
@@ -106,7 +110,7 @@ const dropErrorInputs = (formElement) => {
 const submitFormEditProfile = (event) => {
   event.preventDefault();
 
-  popupSubmitButtonEditProfile.textContent = 'Сохранение...';
+  changeTextOnSubmitButton(popupSubmitButtonEditProfile, 'Сохранение...');
 
   const newUserInfo = {
     name: inputNameProfile.value,
@@ -119,15 +123,16 @@ const submitFormEditProfile = (event) => {
       profileDescription.textContent = newUserInfo.about;
       closePopup(popupEditProfile);
     })
+    .catch(errorHandler)
     .finally(() => {
-      popupSubmitButtonEditProfile.textContent = 'Сохранить';
+      changeTextOnSubmitButton(popupSubmitButtonEditProfile, 'Сохранить');
     });
 }
 
 const submitFormAddPost = (event) => {
   event.preventDefault();
 
-  popupSubmitButtonAddPost.textContent = 'Сохранение...';
+  changeTextOnSubmitButton(popupSubmitButtonAddPost, 'Сохранение...');
 
   const newCard = {
     name: inputNameMesto.value,
@@ -136,7 +141,9 @@ const submitFormAddPost = (event) => {
 
   addCard(newCard)
     .then((newCard) => {
-      renderPost(createPost(newCard.name, newCard.link, [], newCard._id, newCard.owner._id), postsList);
+      const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = newCard;
+      const newPost = createPost({name, link, likes, cardId, ownerId});
+      renderPost(newPost, postsList);
       resetFormPopup(event.target);
       toggleButtonState({
           inactiveButtonClass: 'popup__save-button_inactive'
@@ -147,15 +154,16 @@ const submitFormAddPost = (event) => {
 
       closePopup(popupAddPost);
     })
+    .catch(errorHandler)
     .finally(() => {
-      popupSubmitButtonAddPost.textContent = 'Создать';
+      changeTextOnSubmitButton(popupSubmitButtonAddPost, 'Создать');
     });
 }
 
 const submitFormUpdateAvatar = (event) => {
   event.preventDefault();
 
-  popupSubmitButtonUpdateProfile.textContent = 'Сохранение...';
+  changeTextOnSubmitButton(popupSubmitButtonUpdateProfile, 'Сохранение...');
 
   updateUserAvatar(inputAvatarUrlLink.value)
     .then((newAvatarLink) => {
@@ -169,22 +177,24 @@ const submitFormUpdateAvatar = (event) => {
       );
       closePopup(popupUpdateAvatar);
     })
+    .catch(errorHandler)
     .finally(() => {
-      popupSubmitButtonUpdateProfile.textContent = 'Сохранить';
+      changeTextOnSubmitButton(popupSubmitButtonUpdateProfile, 'Сохранить');
     });
 }
 
 const submitFormDeleteCard = (event) => {
   event.preventDefault();
 
-  popupSubmitButtonDeleteCard.textContent = 'Удаление...';
+  changeTextOnSubmitButton(popupSubmitButtonDeleteCard, 'Удаление...');
 
   deletePost(dataForPopup)
     .then(() => {
       closePopup(popupDeleteCard);
     })
+    .catch(errorHandler)
     .finally(() => {
-      popupSubmitButtonDeleteCard.textContent = 'Да';
+      changeTextOnSubmitButton(popupSubmitButtonDeleteCard, 'Да');
     });
 }
 
