@@ -2,7 +2,6 @@
 
 import '../pages/index.css';
 
-import {enableValidation, toggleButtonState} from './validate.js';
 import {
   openPopup,
   popupAddPost,
@@ -15,51 +14,61 @@ import {
   setValuesEditProfilePopup,
   dropErrorInputs
 } from './modal.js';
-import {profileAvatar, profileDescription, profileName} from './user.js';
-import {createPost, postsList, renderPost} from './card.js';
-import {getUserInfo, getCards, errorHandler} from './api.js';
+import api from './api.js';
+import UserInfo from "./UserInfo.js";
+import Card from "./Card.js";
+import Section from "./Section.js";
+import FormValidator from "./FormValidator";
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const postAddButton = document.querySelector('.profile__add-button');
 
-export let userId;
-
 function getUserInfoWithCards() {
   Promise.all(
     [
-      getUserInfo(),
-      getCards()
+      api.getUserInfo(),
+      api.getCards()
     ]
   )
     .then(([userData, cardsArray]) => {
-      profileName.textContent = userData.name;
-      profileDescription.textContent = userData.about;
-      profileAvatar.alt = userData.name;
-      profileAvatar.src = userData.avatar;
-      userId = userData._id;
+      userInfo.userNameElement.textContent = userData.name;
+      userInfo.userDescriptionElement.textContent = userData.about;
+      userInfo.userPhotoElement.alt = userData.name;
+      userInfo.userPhotoElement.src = userData.avatar;
+      localStorage.setItem('userId', userData._id);
 
-      cardsArray.forEach((card) => {
-          const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = card;
-          const newPost = createPost({name, link, likes, cardId, ownerId});
-          renderPost(newPost, postsList);
-        }
-      )
+      section.renderItems(cardsArray);
     })
-    .catch(errorHandler);
+    .catch(api.errorHandler);
 }
+
+const userInfo = new UserInfo(
+  document.querySelector('.profile__name'),
+  document.querySelector('.profile__description'),
+  document.querySelector('.profile__avatar')
+);
+
+const section = new Section({
+  renderer: (cardData) => {
+    const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = cardData;
+    const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', null);
+    section.addItem(newPost);
+  }
+}, 'posts');
 
 getUserInfoWithCards();
 setValuesEditProfilePopup();
 
-enableValidation({
-  formSelector: '.popup__form',
+const formValidator = new FormValidator({
   inputSelector: '.popup__input-field',
   fieldsetSelector: '.popup__fieldset',
   submitButtonSelector: '.popup__save-button',
   inactiveButtonClass: 'popup__save-button_inactive',
   inputErrorClass: 'popup__input-field_type_error',
   errorClass: 'popup__input-field-error_active'
-});
+}, document.querySelector('.popup__form'));
+
+formValidator.enableValidation();
 
 profileEditButton.addEventListener('click', () => {
   setValuesEditProfilePopup();
@@ -75,10 +84,6 @@ profileEditButton.addEventListener('click', () => {
 
 postAddButton.addEventListener('click', () => {
   openPopup(popupAddPost);
-});
-
-profileAvatar.addEventListener('click', () => {
-  openPopup(popupUpdateAvatar);
 });
 
 

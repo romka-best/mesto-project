@@ -1,8 +1,7 @@
-import {userId} from "./index.js";
 import api from "./Api.js";
 import {openPopup, popupDeleteCard, saveDataForPopup, setSettingsImagePopup} from "./modal.js";
 
-class Card {
+export default class Card {
   constructor({name, link, likes, cardId, ownerId}, selector, handleCardClick) {
     this._name = name;
     this._link = link;
@@ -42,33 +41,35 @@ class Card {
 
   _isSomeId() {
     if (this._likes.some((likeElement) => {
-      return likeElement._id === userId;
+      return likeElement._id === localStorage.getItem('userId');
     })) {
       this._buttonLikePost.classList.add('post__button-like_active');
     }
   }
-  _postPhotoClick(event){
+
+  _postPhotoClick(event) {
     setSettingsImagePopup({
       src: event.target.src,
       alt: this._name,
       textContent: this._name
     });
   }
+
   _deleteButtonClick(event) {
     openPopup(popupDeleteCard);
     saveDataForPopup(event);
   }
+
   _setEventListeners() {
     this._buttonLikePost.addEventListener('click', this._changeReactionPost);
     this._postPhoto.addEventListener('click', this._postPhotoClick);
-
-    if (this._ownerId === userId) {
+    if (this._ownerId === localStorage.getItem('userId')) {
       const deleteButton = this._element.querySelector('.post__delete');
       deleteButton.classList.add('post__delete_active');
       deleteButton.addEventListener('click', this._deleteButtonClick)
     }
   }
-  
+
   _changeReactionPost(event) {
     const reactionPressed = event.target;
     const likePost = reactionPressed.closest(`.${this._selector}`);
@@ -92,10 +93,6 @@ class Card {
 
   _updateLikesOnPost = (countLikes) => {
     this._element.querySelector('.post__count-likes').textContent = countLikes;
-  }
-
-  renderPost(post, postContainer) {
-    postContainer.prepend(post);
   }
 
   deletePost(event) {
