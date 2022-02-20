@@ -1,22 +1,21 @@
-class Api
-{
-  constructor({baseUrl,headers}){
+class Api {
+  constructor({baseUrl, headers}) {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
 
-  _getResponseData(res){
+  _getResponseData(res) {
     if (res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  errorHandler(err){
+  errorHandler(err) {
     console.log(err);
   }
 
-  getUserInfo(){
+  getUserInfo() {
     return fetch(
       `${this._baseUrl}/users/me`,
       {
@@ -25,7 +24,7 @@ class Api
       .then(this._getResponseData);
   }
 
-  editUserInfo(newUserInfo){
+  editUserInfo(newUserInfo) {
     return fetch(
       `${this._baseUrl}/users/me`,
       {
@@ -44,7 +43,7 @@ class Api
       });
   }
 
-  getCards(){
+  getCards() {
     return fetch(
       `${this._baseUrl}/cards`,
       {
@@ -53,7 +52,7 @@ class Api
       .then(this._getResponseData);
   }
 
-  addCard(newCard){
+  addCard(newCard) {
     return fetch(
       `${this._baseUrl}/cards`,
       {
@@ -67,7 +66,7 @@ class Api
       .then(this._getResponseData);
   }
 
-  deleteCard(cardId){
+  deleteCard(cardId) {
     return fetch(
       `${this._baseUrl}/cards/${cardId}`,
       {
@@ -77,7 +76,7 @@ class Api
       .then(this._getResponseData);
   }
 
-  putLikeOnCard(cardId){
+  putLikeOnCard(cardId) {
     return fetch(
       `${this._baseUrl}/cards/likes/${cardId}`,
       {
@@ -87,7 +86,7 @@ class Api
       .then(this._getResponseData);
   }
 
-  deleteLikeOnCard(cardId){
+  deleteLikeOnCard(cardId) {
     return fetch(
       `${this._baseUrl}/cards/likes/${cardId}`,
       {
@@ -97,7 +96,7 @@ class Api
       .then(this._getResponseData);
   }
 
-  updateUserAvatar(newAvatarLink){
+  updateUserAvatar(newAvatarLink) {
     return fetch(
       `${this._baseUrl}/users/me/avatar`,
       {
