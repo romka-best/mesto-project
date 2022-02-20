@@ -1,131 +1,127 @@
-"use strict";
+class Api
+{
+  constructor({baseUrl,headers}){
+    this._baseUrl = baseUrl;
+    this._headers = headers;
+  }
 
-const config = {
+  _getResponseData(res){
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+
+  errorHandler(err){
+    console.log(err);
+  }
+
+  getUserInfo(){
+    return fetch(
+      `${this._baseUrl}/users/me`,
+      {
+        headers: this._headers
+      })
+      .then(this._getResponseData);
+  }
+
+  editUserInfo(newUserInfo){
+    return fetch(
+      `${this._baseUrl}/users/me`,
+      {
+        method: 'PATCH',
+        headers: this._headers,
+        body: JSON.stringify({
+          name: newUserInfo.name,
+          about: newUserInfo.about
+        })
+      })
+      .then((res) => {
+        if (res.ok) {
+          return newUserInfo;
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      });
+  }
+
+  getCards(){
+    return fetch(
+      `${this._baseUrl}/cards`,
+      {
+        headers: this._headers
+      })
+      .then(this._getResponseData);
+  }
+
+  addCard(newCard){
+    return fetch(
+      `${this._baseUrl}/cards`,
+      {
+        method: 'POST',
+        headers: this._headers,
+        body: JSON.stringify({
+          name: newCard.name,
+          link: newCard.link
+        })
+      })
+      .then(this._getResponseData);
+  }
+
+  deleteCard(cardId){
+    return fetch(
+      `${this._baseUrl}/cards/${cardId}`,
+      {
+        method: 'DELETE',
+        headers: this._headers
+      })
+      .then(this._getResponseData);
+  }
+
+  putLikeOnCard(cardId){
+    return fetch(
+      `${this._baseUrl}/cards/likes/${cardId}`,
+      {
+        method: 'PUT',
+        headers: this._headers
+      })
+      .then(this._getResponseData);
+  }
+
+  deleteLikeOnCard(cardId){
+    return fetch(
+      `${this._baseUrl}/cards/likes/${cardId}`,
+      {
+        method: 'DELETE',
+        headers: this._headers
+      })
+      .then(this._getResponseData);
+  }
+
+  updateUserAvatar(newAvatarLink){
+    return fetch(
+      `${this._baseUrl}/users/me/avatar`,
+      {
+        method: 'PATCH',
+        headers: this._headers,
+        body: JSON.stringify({
+          avatar: newAvatarLink
+        })
+      })
+      .then((res) => {
+        if (res.ok) {
+          return newAvatarLink;
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      });
+  }
+}
+
+const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-6',
   headers: {
     authorization: '905a05e8-b14e-4b96-9788-de898e8848e1',
     'Content-Type': 'application/json'
   }
-}
+});
 
-const getResponseData = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`);
-}
-
-const errorHandler = (err) => {
-  console.log(err);
-}
-
-const getUserInfo = () => {
-  return fetch(
-    `${config.baseUrl}/users/me`,
-    {
-      headers: config.headers
-    })
-    .then(getResponseData);
-}
-
-const editUserInfo = (newUserInfo) => {
-  return fetch(
-    `${config.baseUrl}/users/me`,
-    {
-      method: 'PATCH',
-      headers: config.headers,
-      body: JSON.stringify({
-        name: newUserInfo.name,
-        about: newUserInfo.about
-      })
-    })
-    .then((res) => {
-      if (res.ok) {
-        return newUserInfo;
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-const getCards = () => {
-  return fetch(
-    `${config.baseUrl}/cards`,
-    {
-      headers: config.headers
-    })
-    .then(getResponseData);
-}
-
-const addCard = (newCard) => {
-  return fetch(
-    `${config.baseUrl}/cards`,
-    {
-      method: 'POST',
-      headers: config.headers,
-      body: JSON.stringify({
-        name: newCard.name,
-        link: newCard.link
-      })
-    })
-    .then(getResponseData);
-}
-
-const deleteCard = (cardId) => {
-  return fetch(
-    `${config.baseUrl}/cards/${cardId}`,
-    {
-      method: 'DELETE',
-      headers: config.headers
-    })
-    .then(getResponseData);
-}
-
-const putLikeOnCard = (cardId) => {
-  return fetch(
-    `${config.baseUrl}/cards/likes/${cardId}`,
-    {
-      method: 'PUT',
-      headers: config.headers
-    })
-    .then(getResponseData);
-}
-
-const deleteLikeOnCard = (cardId) => {
-  return fetch(
-    `${config.baseUrl}/cards/likes/${cardId}`,
-    {
-      method: 'DELETE',
-      headers: config.headers
-    })
-    .then(getResponseData);
-}
-
-const updateUserAvatar = (newAvatarLink) => {
-  return fetch(
-    `${config.baseUrl}/users/me/avatar`,
-    {
-      method: 'PATCH',
-      headers: config.headers,
-      body: JSON.stringify({
-        avatar: newAvatarLink
-      })
-    })
-    .then((res) => {
-      if (res.ok) {
-        return newAvatarLink;
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-export {
-  errorHandler,
-  getUserInfo,
-  editUserInfo,
-  getCards,
-  addCard,
-  deleteCard,
-  putLikeOnCard,
-  deleteLikeOnCard,
-  updateUserAvatar
-};
+export default api;
