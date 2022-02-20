@@ -3,13 +3,14 @@ import api from "./Api.js";
 import {openPopup, popupDeleteCard, saveDataForPopup, setSettingsImagePopup} from "./modal.js";
 
 class Card {
-  constructor({name, link, likes, cardId, ownerId}, selector) {
+  constructor({name, link, likes, cardId, ownerId}, selector, handleCardClick) {
     this._name = name;
     this._link = link;
     this._likes = likes;
     this._cardId = cardId;
     this._ownerId = ownerId;
     this._selector = selector;
+    this._handleCardClick = handleCardClick;
   }
 
   _getElement() {
@@ -36,6 +37,7 @@ class Card {
     this._postPhoto.alt = this._name;
 
     this._setEventListeners();
+    return this._element;
   }
 
   _isSomeId() {
@@ -45,26 +47,28 @@ class Card {
       this._buttonLikePost.classList.add('post__button-like_active');
     }
   }
-
+  _postPhotoClick(event){
+    setSettingsImagePopup({
+      src: event.target.src,
+      alt: this._name,
+      textContent: this._name
+    });
+  }
+  _deleteButtonClick(event) {
+    openPopup(popupDeleteCard);
+    saveDataForPopup(event);
+  }
   _setEventListeners() {
     this._buttonLikePost.addEventListener('click', this._changeReactionPost);
-    this._postPhoto.addEventListener('click', (event) => {
-      setSettingsImagePopup({
-        src: event.target.src,
-        alt: name,
-        textContent: name
-      });
-    });
+    this._postPhoto.addEventListener('click', this._postPhotoClick);
+
     if (this._ownerId === userId) {
       const deleteButton = this._element.querySelector('.post__delete');
       deleteButton.classList.add('post__delete_active');
-      deleteButton.addEventListener('click', (event) => {
-        openPopup(popupDeleteCard);
-        saveDataForPopup(event);
-      });
+      deleteButton.addEventListener('click', this._deleteButtonClick)
     }
   }
-
+  
   _changeReactionPost(event) {
     const reactionPressed = event.target;
     const likePost = reactionPressed.closest(`.${this._selector}`);
