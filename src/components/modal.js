@@ -39,31 +39,6 @@ const settings = {
   errorClass: 'popup__input-field-error_active'
 }
 
-function setEventListenersPopups() {
-  popups.forEach((popup) => {
-    popup.addEventListener('mousedown', (evt) => {
-      if (evt.target.classList.contains('popup_opened')) {
-        closePopup(popup);
-      }
-      if (evt.target.classList.contains('popup__close-button')) {
-        closePopup(popup);
-      }
-    });
-  });
-}
-
-setEventListenersPopups();
-
-const openPopup = (popup) => {
-  document.addEventListener('keydown', checkCloseWithEscape);
-  popup.classList.add('popup_opened');
-}
-
-const closePopup = (popup) => {
-  document.removeEventListener('keydown', checkCloseWithEscape);
-  popup.classList.remove('popup_opened');
-}
-
 const resetFormPopup = (popupForm) => {
   popupForm.reset();
 }
@@ -76,27 +51,10 @@ const changeTextOnSubmitButton = (buttonElement, text) => {
   buttonElement.textContent = text;
 }
 
-const setSettingsImagePopup = (settings) => {
-  popupImage.src = settings.src;
-  popupImage.alt = settings.alt;
-  popupCaption.textContent = settings.textContent;
-
-  popupImage.onload = () => openPopup(popupWithImage);
-}
 
 const setValuesEditProfilePopup = () => {
   inputNameProfile.value = profileName.textContent;
   inputDescriptionProfile.value = profileDescription.textContent;
-}
-
-const checkCloseWithEscape = (evt) => {
-  if (evt.code === 'Escape') {
-    popups.forEach((popup) => {
-      if (popup.classList.contains('popup_opened')) {
-        closePopup(popup);
-      }
-    });
-  }
 }
 
 const dropErrorInputs = (formElement) => {
