@@ -26,21 +26,11 @@ const popupSubmitButtonAddPost = popupFormAddPost.querySelector('.popup__save-bu
 const popupSubmitButtonUpdateProfile = popupFormUpdateAvatar.querySelector('.popup__save-button');
 const popupSubmitButtonDeleteCard = popupFormDeleteCard.querySelector('.popup__save-button');
 
-const popupWithImage = document.querySelector('.popup-with-image');
-const popupImage = document.querySelector('.popup-with-image__image');
-const popupCaption = document.querySelector('.popup-with-image__figcaption');
-
-const popups = document.querySelectorAll('.popup');
-
 let dataForPopup;
 
 const settings = {
   inputErrorClass: 'popup__input-field_type_error',
   errorClass: 'popup__input-field-error_active'
-}
-
-const resetFormPopup = (popupForm) => {
-  popupForm.reset();
 }
 
 const saveDataForPopup = (data) => {
@@ -162,18 +152,15 @@ popupFormUpdateAvatar.addEventListener('submit', submitFormUpdateAvatar);
 popupFormDeleteCard.addEventListener('submit', submitFormDeleteCard);
 
 export {
-  openPopup,
   saveDataForPopup,
   popupAddPost,
   popupEditProfile,
   popupUpdateAvatar,
   popupDeleteCard,
-  popupWithImage,
   inputNameProfile,
   inputDescriptionProfile,
   popupSubmitButtonEditProfile,
   popupFormEditProfile,
   setValuesEditProfilePopup,
-  setSettingsImagePopup,
   dropErrorInputs
 };

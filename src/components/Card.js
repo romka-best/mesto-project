@@ -1,8 +1,8 @@
 import api from "./Api.js";
-import {openPopup, popupDeleteCard, saveDataForPopup, setSettingsImagePopup} from "./modal.js";
+import {openPopup, popupDeleteCard, saveDataForPopup} from "./modal.js";
 
 export default class Card {
-  constructor({name, link, likes, cardId, ownerId}, selector, handleCardClick) {
+  constructor({name, link, likes, cardId, ownerId}, selector, handleCardClick, handleDeleteCardCLick) {
     this._name = name;
     this._link = link;
     this._likes = likes;
@@ -10,6 +10,7 @@ export default class Card {
     this._ownerId = ownerId;
     this._selector = selector;
     this._handleCardClick = handleCardClick;
+    this._handleDeleteCardClick = handleDeleteCardCLick;
   }
 
   _getElement() {
@@ -47,14 +48,6 @@ export default class Card {
     }
   }
 
-  _postPhotoClick(event) {
-    setSettingsImagePopup({
-      src: event.target.src,
-      alt: this._name,
-      textContent: this._name
-    });
-  }
-
   _deleteButtonClick(event) {
     openPopup(popupDeleteCard);
     saveDataForPopup(event);
@@ -62,11 +55,11 @@ export default class Card {
 
   _setEventListeners() {
     this._buttonLikePost.addEventListener('click', this._changeReactionPost);
-    this._postPhoto.addEventListener('click', this._postPhotoClick);
+    this._postPhoto.addEventListener('click', this._handleCardClick);
     if (this._ownerId === localStorage.getItem('userId')) {
       const deleteButton = this._element.querySelector('.post__delete');
       deleteButton.classList.add('post__delete_active');
-      deleteButton.addEventListener('click', this._deleteButtonClick)
+      deleteButton.addEventListener('click', this._handleDeleteCardClick);
     }
   }
 
@@ -75,14 +68,16 @@ export default class Card {
     const likePost = reactionPressed.closest(`.${this._selector}`);
 
     if (reactionPressed.classList.contains('post__button-like_active')) {
-      api.deleteLikeOnCard(likePost.id)
+      api
+        .deleteLikeOnCard(likePost.id)
         .then((result) => {
           reactionPressed.classList.remove('post__button-like_active');
           this._updateLikesOnPost(likePost, result.likes.length);
         })
         .catch(api.errorHandler);
     } else {
-      api.putLikeOnCard(likePost.id)
+      api
+        .putLikeOnCard(likePost.id)
         .then((result) => {
           reactionPressed.classList.add('post__button-like_active');
           this._updateLikesOnPost(likePost, result.likes.length);
@@ -93,14 +88,5 @@ export default class Card {
 
   _updateLikesOnPost = (countLikes) => {
     this._element.querySelector('.post__count-likes').textContent = countLikes;
-  }
-
-  deletePost(event) {
-    const deletePost = event.target.closest(`.${this._selector}`);
-
-    return api.deleteCard(deletePost.id)
-      .then(() => {
-        deletePost.remove();
-      })
   }
 }
