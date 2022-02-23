@@ -11,6 +11,17 @@ import PopupWithImage from './PopupWithImage.js';
 import PopupWithForm from './PopupWithForm.js';
 import PopupWithConfirm from './PopupWithConfirm.js';
 
+const inputNameProfile = document.querySelector('.popupinput-field_type_name-profile');
+const inputDescriptionProfile = document.querySelector('.popupinput-field_type_description-profile');
+const settingsForm = {
+  inputSelector: '.popupinput-field',
+  fieldsetSelector: '.popupfieldset',
+  submitButtonSelector: '.popupsave-button',
+  inactiveButtonClass: 'popupsave-button_inactive',
+  inputErrorClass: 'popupinput-field_type_error',
+  errorClass: 'popupinput-field-error_active'
+}
+
 function getUserInfoWithCards() {
   Promise.all(
     [
@@ -59,6 +70,7 @@ const popupDeleteCard = new PopupWithConfirm('popup_type_delete-card', (evt) => 
   api.deleteCard(this.card.cardId)
     .then(() => {
       evt.target.closest(`.${this.card.selector}`).remove();
+      this.close();
     })
     .catch(api.errorHandler)
     .finally(() => {
@@ -73,6 +85,7 @@ const popupEditProfile = new PopupWithForm('popup_type_edit-profile', (newUserIn
       userInfo.userNameElement.textContent = newUserInfo.name;
       userInfo.userDescriptionElement.textContent = newUserInfo.about;
       userInfo.userPhotoElement.alt = newUserInfo.name;
+      this.close();
     })
     .catch(api.errorHandler)
     .finally(() => {
@@ -84,6 +97,7 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', (avatar)
   api.updateUserAvatar(avatar)
     .then((newUrl) => {
       userInfo.userPhotoElement.src = newUrl;
+      this.close();
     })
     .catch(api.errorHandler)
     .finally(() => {
@@ -91,7 +105,16 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', (avatar)
     });
 }, 'popup__form_type_update-avatar', 'popup__input-field', 'popup__save-button');
 const popupAddPost = new PopupWithForm('popup_type_add-post', () => {
-
+  this.renderText(true);
+  api.addCard(card)
+  .then((newCard)=>{
+    section.renderer(newCard);
+    this.close();
+  })
+  .catch(api.errorHandler)
+  .finally(() => {
+    this.renderText(false);
+  });
 }, 'popup__form_type_add-post', 'popup__input-field', 'popup__save-button');
 
 const popups = [popupEditProfile, popupAddPost, popupWithImage, popupDeleteCard, popupUpdateAvatar];
@@ -99,34 +122,26 @@ popups.forEach((popup) => {
   popup.setEventListeners();
 });
 
-const formValidator = new FormValidator({
-  inputSelector: '.popup__input-field',
-  fieldsetSelector: '.popup__fieldset',
-  submitButtonSelector: '.popup__save-button',
-  inactiveButtonClass: 'popup__save-button_inactive',
-  inputErrorClass: 'popup__input-field_type_error',
-  errorClass: 'popup__input-field-error_active'
-}, document.querySelector('.popup__form'));
-formValidator.enableValidation();
-
 getUserInfoWithCards();
 
 profileEditButton.addEventListener('click', () => {
-  setValuesEditProfilePopup();
-  dropErrorInputs(popupFormEditProfile);
-  toggleButtonState(
-    {
-      inactiveButtonClass: 'popup__save-button_inactive'
-    }, [inputNameProfile, inputDescriptionProfile],
-    popupSubmitButtonEditProfile
-  );
-  openPopup(popupEditProfile);
+  inputNameProfile.value = userInfo.userNameElement.textContent;
+  inputDescriptionProfile.value = userInfo.userDescriptionElement.textContent;
+  popupEditProfile.open();
 });
 
 postAddButton.addEventListener('click', () => {
-  openPopup(popupAddPost);
+  popupAddPost.open();
 });
 
+const setFormValidation = (formElement) => {
+  const formValidator = new FormValidator(settingsForm, formElement);
+  formValidator.enableValidation();
+}
+
+Array.from(document.forms).forEach(form => {
+  setFormValidation(form);
+})
 
 window.onload = function () {
   document.querySelector('.page').classList.remove("page_without-transition");

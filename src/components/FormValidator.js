@@ -18,13 +18,9 @@ export default class FormValidator {
   }
 
   enableValidation() {
-    const formList = Array.from(document.querySelectorAll(this._formElement));
-    formList.forEach((formElement) => {
-      const fieldsetList = Array.from(formElement.querySelectorAll(this._fieldsetSelector));
-
-      fieldsetList.forEach((fieldSet) => {
-        this._setEventListeners(fieldSet);
-      });
+    const fieldsetList = Array.from(this.formElement.querySelectorAll(this._fieldsetSelector));
+    fieldsetList.forEach((fieldSet) => {
+      this._setEventListeners(fieldSet);
     });
   };
 
