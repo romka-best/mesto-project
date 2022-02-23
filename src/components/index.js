@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import '../pages/index.css';
 
@@ -52,88 +52,68 @@ const userInfo = new UserInfo(
   document.querySelector('.profile__avatar')
 );
 
-const section = new Section({
-  renderer: (cardData) => {
-    const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = cardData;
-    const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', (evt) => {
-        popupWithImage.open(evt.target.src, this.name, this.name);
-      },
-      () => {
-        popupDeleteCard.open(this);
-      },
-      (cardId, reactionPressed) => {
-        api
-          .deleteLikeOnCard(cardId)
-          .then((result) => {
-            reactionPressed.classList.remove('post__button-like_active');
-            this._updateLikesOnPost(result.likes.length);
-          })
-          .catch(api.errorHandler);
-      },
-      (cardId, reactionPressed) => {
-        api
-          .putLikeOnCard(cardId)
-          .then((result) => {
-            reactionPressed.classList.add('post__button-like_active');
-            this._updateLikesOnPost(result.likes.length);
-          })
-          .catch(api.errorHandler);
-      });
-    section.addItem(newPost.createCard());
-  }
-}, 'posts');
-
 // Popups
-const popupWithImage = new PopupWithImage('popup-with-image', 'popup-with-image__figcaption');
-const popupDeleteCard = new PopupWithConfirm('popup_type_delete-card', (evt) => {
-  this.renderText(true, 'Удаление...');
-  api.deleteCard(this.card.cardId)
-    .then(() => {
-      evt.target.closest(`.${this.card.selector}`).remove();
-      this.close();
-    })
-    .catch(api.errorHandler)
-    .finally(() => {
-      this.renderText(false);
-    });
-
-}, 'popup__form_type_delete-card', null, 'popup__save-button_type_delete-card');
-const popupEditProfile = new PopupWithForm('popup_type_edit-profile', (newUserInfo) => {
-  this.renderText(true);
-  api.editUserInfo(newUserInfo)
-    .then((newUserInfo) => {
-      userInfo.setUserInfo(newUserInfo);
-      this.close();
-    })
-    .catch(api.errorHandler)
-    .finally(() => {
-      this.renderText(false);
-    });
-}, 'popup__form_type_edit-profile', 'popup__input-field', 'popup__save-button');
-const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', (avatar) => {
-  this.renderText(true);
-  api.updateUserAvatar(avatar)
-    .then((newUrl) => {
-      userInfo.userPhotoElement.src = newUrl;
-      this.close();
-    })
-    .catch(api.errorHandler)
-    .finally(() => {
-      this.renderText(false);
-    });
-}, 'popup__form_type_update-avatar', 'popup__input-field', 'popup__save-button');
-const popupAddPost = new PopupWithForm('popup_type_add-post', (newCard) => {
-  this.renderText(true);
-  api.addCard(newCard)
-    .then((newCard) => {
-      section.addItem(newCard.createCard());
-      this.close();
-    })
-    .catch(api.errorHandler)
-    .finally(() => {
-      this.renderText(false);
-    });
-}, 'popup__form_type_add-post', 'popup__input-field', 'popup__save-button');
+const popupWithImage = new PopupWithImage('popup-with-image', 'popup-with-image__image', 'popup-with-image__figcaption');
+const popupDeleteCard = new PopupWithConfirm('popup_type_delete-card', 'popup__form_type_delete-card', null, 'popup__save-button_type_delete-card',
+  {
+    callBackSubmitForm: (evt) => {
+      popupDeleteCard.renderText(true, 'Удаление...');
+      api.deleteCard(popupDeleteCard.card.cardId)
+        .then(() => {
+          evt.target.closest(`.${popupDeleteCard.card.selector}`).remove();
+          popupDeleteCard.close();
+        })
+        .catch(api.errorHandler)
+        .finally(() => {
+          popupDeleteCard.renderText(false);
+        });
+    }
+  });
+const popupEditProfile = new PopupWithForm('popup_type_edit-profile', 'popup__form_type_edit-profile', 'popup__input-field', 'popup__save-button',
+  {
+    callBackSubmitForm: (newUserInfo) => {
+      popupEditProfile.renderText(true);
+      api.editUserInfo(newUserInfo)
+        .then((newUserInfo) => {
+          userInfo.setUserInfo(newUserInfo);
+          popupEditProfile.close();
+        })
+        .catch(api.errorHandler)
+        .finally(() => {
+          popupEditProfile.renderText(false);
+        });
+    }
+  });
+const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', 'popup__form_type_update-avatar', 'popup__input-field', 'popup__save-button',
+  {
+    callBackSubmitForm: (avatar) => {
+      popupUpdateAvatar.renderText(true);
+      api.updateUserAvatar(avatar)
+        .then((newUrl) => {
+          userInfo.userPhotoElement.src = newUrl;
+          popupUpdateAvatar.close();
+        })
+        .catch(api.errorHandler)
+        .finally(() => {
+          popupUpdateAvatar.renderText(false);
+        });
+    }
+  });
+const popupAddPost = new PopupWithForm('popup_type_add-post', 'popup__form_type_add-post', 'popup__input-field', 'popup__save-button',
+  {
+    callBackSubmitForm: (newCard) => {
+      popupAddPost.renderText(true);
+      api.addCard(newCard)
+        .then((newCard) => {
+          section.addItem(newCard.createCard());
+          popupAddPost.close();
+        })
+        .catch(api.errorHandler)
+        .finally(() => {
+          popupAddPost.renderText(false);
+        });
+    }
+  });
 
 const popups = [popupEditProfile, popupAddPost, popupWithImage, popupDeleteCard, popupUpdateAvatar];
 popups.forEach((popup) => {
@@ -148,6 +128,37 @@ const setFormValidation = (formElement) => {
 Array.from(document.forms).forEach(form => {
   setFormValidation(form);
 })
+
+const section = new Section({
+  renderer: (cardData) => {
+    const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = cardData;
+    const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', (evt) => {
+        popupWithImage.open(evt.target.src, name, name);
+      },
+      () => {
+        popupDeleteCard.open(newPost);
+      },
+      (cardId, reactionPressed) => {
+        api
+          .deleteLikeOnCard(cardId)
+          .then((result) => {
+            reactionPressed.classList.remove('post__button-like_active');
+            newPost._updateLikesOnPost(result.likes.length);
+          })
+          .catch(api.errorHandler);
+      },
+      (cardId, reactionPressed) => {
+        api
+          .putLikeOnCard(cardId)
+          .then((result) => {
+            reactionPressed.classList.add('post__button-like_active');
+            newPost._updateLikesOnPost(result.likes.length);
+          })
+          .catch(api.errorHandler);
+      });
+    section.addItem(newPost.createCard());
+  }
+}, 'posts');
 
 getUserInfoWithCards();
 

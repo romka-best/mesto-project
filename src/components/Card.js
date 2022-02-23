@@ -54,7 +54,7 @@ export default class Card {
   }
 
   _setEventListeners() {
-    this._buttonLikePost.addEventListener('click', this._changeReactionPost);
+    this._buttonLikePost.addEventListener('click', this._changeReactionPost.bind(this));
     this._postPhoto.addEventListener('click', this._handleCardClick);
     if (this._ownerId === localStorage.getItem('userId')) {
       const deleteButton = this._element.querySelector('.post__delete');
@@ -65,12 +65,11 @@ export default class Card {
 
   _changeReactionPost(event) {
     const reactionPressed = event.target;
-    const likePost = reactionPressed.closest(`.${this._selector}`);
 
     if (reactionPressed.classList.contains('post__button-like_active')) {
-      this._deleteLike(likePost.id, reactionPressed);
+      this._deleteLike(this._cardId, reactionPressed);
     } else {
-      this._setLike(likePost.id, reactionPressed);
+      this._setLike(this._cardId, reactionPressed);
     }
   }
 
