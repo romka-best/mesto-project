@@ -1,5 +1,4 @@
 import api from "./Api.js";
-import {openPopup, popupDeleteCard, saveDataForPopup} from "./modal.js";
 
 export default class Card {
   constructor({name, link, likes, cardId, ownerId}, selector, handleCardClick, handleDeleteCardCLick) {
@@ -40,21 +39,12 @@ export default class Card {
     return this._element;
   }
 
-  deleteCard() {
-    
-  }
-
   _isSomeId() {
     if (this._likes.some((likeElement) => {
       return likeElement._id === localStorage.getItem('userId');
     })) {
       this._buttonLikePost.classList.add('post__button-like_active');
     }
-  }
-
-  _deleteButtonClick(event) {
-    openPopup(popupDeleteCard);
-    saveDataForPopup(event);
   }
 
   _setEventListeners() {

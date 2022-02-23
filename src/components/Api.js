@@ -96,19 +96,19 @@ class Api {
       .then(this._getResponseData);
   }
 
-  updateUserAvatar(newAvatarLink) {
+  updateUserAvatar(avatar) {
     return fetch(
       `${this._baseUrl}/users/me/avatar`,
       {
         method: 'PATCH',
         headers: this._headers,
         body: JSON.stringify({
-          avatar: newAvatarLink
+          avatar: avatar.url
         })
       })
       .then((res) => {
         if (res.ok) {
-          return newAvatarLink;
+          return avatar.url;
         }
         return Promise.reject(`Ошибка: ${res.status}`);
       });
