@@ -9,7 +9,6 @@ import Section from './Section.js';
 import FormValidator from './FormValidator.js';
 import PopupWithImage from './PopupWithImage.js';
 import PopupWithForm from './PopupWithForm.js';
-import PopupWithConfirm from './PopupWithConfirm.js';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-6',
@@ -31,6 +30,7 @@ const settingsForm = {
   inputErrorClass: 'popup__input-field_type_error',
   errorClass: 'popup__input-field-error_active'
 }
+let tempPost;
 
 function getUserInfoWithCards() {
   api.getInitialData()
@@ -54,13 +54,13 @@ const userInfo = new UserInfo(
 
 // Popups
 const popupWithImage = new PopupWithImage('popup-with-image', 'popup-with-image__image', 'popup-with-image__figcaption');
-const popupDeleteCard = new PopupWithConfirm('popup_type_delete-card', 'popup__form_type_delete-card', null, 'popup__save-button_type_delete-card',
+const popupDeleteCard = new PopupWithForm('popup_type_delete-card', 'popup__form_type_delete-card', null, 'popup__save-button_type_delete-card',
   {
-    callBackSubmitForm: (evt) => {
+    callBackSubmitForm: () => {
       popupDeleteCard.renderText(true, 'Удаление...');
-      api.deleteCard(popupDeleteCard.card.cardId)
+      api.deleteCard(tempPost._cardId)
         .then(() => {
-          evt.target.closest(`.${popupDeleteCard.card.selector}`).remove();
+          document.getElementById(`${tempPost._cardId}`).remove();
           popupDeleteCard.close();
         })
         .catch(api.errorHandler)
@@ -136,7 +136,8 @@ const section = new Section({
         popupWithImage.open(evt.target.src, name, name);
       },
       () => {
-        popupDeleteCard.open(newPost);
+        tempPost = newPost;
+        popupDeleteCard.open();
       },
       (cardId, reactionPressed) => {
         api
@@ -158,7 +159,7 @@ const section = new Section({
       });
     section.addItem(newPost.createCard());
   }
-}, 'posts');
+}, 'posts-list');
 
 getUserInfoWithCards();
 
