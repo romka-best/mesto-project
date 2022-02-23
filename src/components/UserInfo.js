@@ -1,6 +1,3 @@
-import api from "./Api.js";
-import {openPopup, popupUpdateAvatar} from "./modal";
-
 export default class UserInfo {
   constructor(userNameElement, userDescriptionElement, userPhotoElement) {
     this.userNameElement = userNameElement;
@@ -17,18 +14,8 @@ export default class UserInfo {
   }
 
   setUserInfo(newUserInfo) {
-    return api
-      .editUserInfo(newUserInfo)
-      .then((newUserInfo) => {
-        this.userNameElement.textContent = newUserInfo.name;
-        this.userDescriptionElement.textContent = newUserInfo.about;
-      })
-      .catch(api.errorHandler);
-  }
-
-  _setEventListeners() {
-    this.userPhotoElement.addEventListener('click', () => {
-      openPopup(popupUpdateAvatar);
-    });
+    this.userNameElement.textContent = newUserInfo.name;
+    this.userDescriptionElement.textContent = newUserInfo.about;
+    this.userPhotoElement.alt = newUserInfo.name;
   }
 }

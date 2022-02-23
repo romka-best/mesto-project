@@ -18,7 +18,7 @@ export default class FormValidator {
   }
 
   enableValidation() {
-    const fieldsetList = Array.from(this.formElement.querySelectorAll(this._fieldsetSelector));
+    const fieldsetList = Array.from(this._formElement.querySelectorAll(this._fieldsetSelector));
     fieldsetList.forEach((fieldSet) => {
       this._setEventListeners(fieldSet);
     });
@@ -52,8 +52,8 @@ export default class FormValidator {
   }
 
   _setEventListeners() {
-    this._inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
-    this._buttonElement = this._formElement.querySelector(this._submitButtonSelector);
+    this._inputList = Array.from(this._formElement.querySelectorAll(`.${this._inputSelector}`));
+    this._buttonElement = this._formElement.querySelector(`.${this._submitButtonSelector}`);
 
     this._toggleButtonState();
 

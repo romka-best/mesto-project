@@ -1,4 +1,4 @@
-import PopupWithForm from "./PopupWithForm.js";
+import PopupWithForm from './PopupWithForm.js';
 
 export default class PopupWithConfirm extends PopupWithForm {
   _submitForm(event) {

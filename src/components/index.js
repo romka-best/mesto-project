@@ -2,7 +2,7 @@
 
 import '../pages/index.css';
 
-import api from './api.js';
+import Api from './api.js';
 import UserInfo from './UserInfo.js';
 import Card from './Card.js';
 import Section from './Section.js';
@@ -11,24 +11,29 @@ import PopupWithImage from './PopupWithImage.js';
 import PopupWithForm from './PopupWithForm.js';
 import PopupWithConfirm from './PopupWithConfirm.js';
 
-const inputNameProfile = document.querySelector('.popupinput-field_type_name-profile');
-const inputDescriptionProfile = document.querySelector('.popupinput-field_type_description-profile');
+const api = new Api({
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-6',
+  headers: {
+    authorization: '905a05e8-b14e-4b96-9788-de898e8848e1',
+    'Content-Type': 'application/json'
+  }
+});
+const profileEditButton = document.querySelector('.profile__edit-button');
+const postAddButton = document.querySelector('.profile__add-button');
+const profileAvatar = document.querySelector('.profile__avatar');
+const inputNameProfile = document.querySelector('.popup__input-field_type_name-profile');
+const inputDescriptionProfile = document.querySelector('.popup__input-field_type_description-profile');
 const settingsForm = {
-  inputSelector: '.popupinput-field',
-  fieldsetSelector: '.popupfieldset',
-  submitButtonSelector: '.popupsave-button',
-  inactiveButtonClass: 'popupsave-button_inactive',
-  inputErrorClass: 'popupinput-field_type_error',
-  errorClass: 'popupinput-field-error_active'
+  inputSelector: 'popup__input-field',
+  fieldsetSelector: 'popup__fieldset',
+  submitButtonSelector: 'popup__save-button',
+  inactiveButtonClass: 'popup__save-button_inactive',
+  inputErrorClass: 'popup__input-field_type_error',
+  errorClass: 'popup__input-field-error_active'
 }
 
 function getUserInfoWithCards() {
-  Promise.all(
-    [
-      api.getUserInfo(),
-      api.getCards()
-    ]
-  )
+  api.getInitialData()
     .then(([userData, cardsArray]) => {
       userInfo.userNameElement.textContent = userData.name;
       userInfo.userDescriptionElement.textContent = userData.about;
@@ -40,9 +45,6 @@ function getUserInfoWithCards() {
     })
     .catch(api.errorHandler);
 }
-
-const profileEditButton = document.querySelector('.profile__edit-button');
-const postAddButton = document.querySelector('.profile__add-button');
 
 const userInfo = new UserInfo(
   document.querySelector('.profile__name'),
@@ -58,8 +60,26 @@ const section = new Section({
       },
       () => {
         popupDeleteCard.open(this);
+      },
+      (cardId, reactionPressed) => {
+        api
+          .deleteLikeOnCard(cardId)
+          .then((result) => {
+            reactionPressed.classList.remove('post__button-like_active');
+            this._updateLikesOnPost(result.likes.length);
+          })
+          .catch(api.errorHandler);
+      },
+      (cardId, reactionPressed) => {
+        api
+          .putLikeOnCard(cardId)
+          .then((result) => {
+            reactionPressed.classList.add('post__button-like_active');
+            this._updateLikesOnPost(result.likes.length);
+          })
+          .catch(api.errorHandler);
       });
-    section.addItem(newPost);
+    section.addItem(newPost.createCard());
   }
 }, 'posts');
 
@@ -82,9 +102,7 @@ const popupEditProfile = new PopupWithForm('popup_type_edit-profile', (newUserIn
   this.renderText(true);
   api.editUserInfo(newUserInfo)
     .then((newUserInfo) => {
-      userInfo.userNameElement.textContent = newUserInfo.name;
-      userInfo.userDescriptionElement.textContent = newUserInfo.about;
-      userInfo.userPhotoElement.alt = newUserInfo.name;
+      userInfo.setUserInfo(newUserInfo);
       this.close();
     })
     .catch(api.errorHandler)
@@ -104,34 +122,22 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', (avatar)
       this.renderText(false);
     });
 }, 'popup__form_type_update-avatar', 'popup__input-field', 'popup__save-button');
-const popupAddPost = new PopupWithForm('popup_type_add-post', () => {
+const popupAddPost = new PopupWithForm('popup_type_add-post', (newCard) => {
   this.renderText(true);
-  api.addCard(card)
-  .then((newCard)=>{
-    section.renderer(newCard);
-    this.close();
-  })
-  .catch(api.errorHandler)
-  .finally(() => {
-    this.renderText(false);
-  });
+  api.addCard(newCard)
+    .then((newCard) => {
+      section.addItem(newCard.createCard());
+      this.close();
+    })
+    .catch(api.errorHandler)
+    .finally(() => {
+      this.renderText(false);
+    });
 }, 'popup__form_type_add-post', 'popup__input-field', 'popup__save-button');
 
 const popups = [popupEditProfile, popupAddPost, popupWithImage, popupDeleteCard, popupUpdateAvatar];
 popups.forEach((popup) => {
   popup.setEventListeners();
-});
-
-getUserInfoWithCards();
-
-profileEditButton.addEventListener('click', () => {
-  inputNameProfile.value = userInfo.userNameElement.textContent;
-  inputDescriptionProfile.value = userInfo.userDescriptionElement.textContent;
-  popupEditProfile.open();
-});
-
-postAddButton.addEventListener('click', () => {
-  popupAddPost.open();
 });
 
 const setFormValidation = (formElement) => {
@@ -141,6 +147,23 @@ const setFormValidation = (formElement) => {
 
 Array.from(document.forms).forEach(form => {
   setFormValidation(form);
+})
+
+getUserInfoWithCards();
+
+profileEditButton.addEventListener('click', () => {
+  const user = userInfo.getUserInfo();
+  inputNameProfile.value = user.name;
+  inputDescriptionProfile.value = user.description;
+  popupEditProfile.open();
+});
+
+postAddButton.addEventListener('click', () => {
+  popupAddPost.open();
+});
+
+profileAvatar.addEventListener('click', () => {
+  popupUpdateAvatar.open();
 })
 
 window.onload = function () {

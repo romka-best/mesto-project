@@ -1,7 +1,11 @@
-import api from "./Api.js";
-
 export default class Card {
-  constructor({name, link, likes, cardId, ownerId}, selector, handleCardClick, handleDeleteCardCLick) {
+  constructor({
+                name,
+                link,
+                likes,
+                cardId,
+                ownerId
+              }, selector, handleCardClick, handleDeleteCardCLick, deleteLike, setLike) {
     this._name = name;
     this._link = link;
     this._likes = likes;
@@ -10,6 +14,8 @@ export default class Card {
     this._selector = selector;
     this._handleCardClick = handleCardClick;
     this._handleDeleteCardClick = handleDeleteCardCLick;
+    this._deleteLike = deleteLike;
+    this._setLike = setLike;
   }
 
   _getElement() {
@@ -41,7 +47,7 @@ export default class Card {
 
   _isSomeId() {
     if (this._likes.some((likeElement) => {
-      return likeElement._id === localStorage.getItem('userId');
+      return likeElement._id === Number.parseInt(localStorage.getItem('userId'));
     })) {
       this._buttonLikePost.classList.add('post__button-like_active');
     }
@@ -62,21 +68,9 @@ export default class Card {
     const likePost = reactionPressed.closest(`.${this._selector}`);
 
     if (reactionPressed.classList.contains('post__button-like_active')) {
-      api
-        .deleteLikeOnCard(likePost.id)
-        .then((result) => {
-          reactionPressed.classList.remove('post__button-like_active');
-          this._updateLikesOnPost(likePost, result.likes.length);
-        })
-        .catch(api.errorHandler);
+      this._deleteLike(likePost.id, reactionPressed);
     } else {
-      api
-        .putLikeOnCard(likePost.id)
-        .then((result) => {
-          reactionPressed.classList.add('post__button-like_active');
-          this._updateLikesOnPost(likePost, result.likes.length);
-        })
-        .catch(api.errorHandler);
+      this._setLike(likePost.id, reactionPressed);
     }
   }
 

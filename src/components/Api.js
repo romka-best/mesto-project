@@ -1,4 +1,4 @@
-class Api {
+export default class Api {
   constructor({baseUrl, headers}) {
     this._baseUrl = baseUrl;
     this._headers = headers;
@@ -13,6 +13,10 @@ class Api {
 
   errorHandler(err) {
     console.log(err);
+  }
+
+  getInitialData() {
+    return Promise.all([this.getUserInfo(), this.getCards()]);
   }
 
   getUserInfo() {
@@ -114,13 +118,3 @@ class Api {
       });
   }
 }
-
-const api = new Api({
-  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-6',
-  headers: {
-    authorization: '905a05e8-b14e-4b96-9788-de898e8848e1',
-    'Content-Type': 'application/json'
-  }
-});
-
-export default api;
