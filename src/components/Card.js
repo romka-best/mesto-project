@@ -40,6 +40,10 @@ export default class Card {
     return this._element;
   }
 
+  deleteCard() {
+    
+  }
+
   _isSomeId() {
     if (this._likes.some((likeElement) => {
       return likeElement._id === localStorage.getItem('userId');

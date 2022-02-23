@@ -19,9 +19,23 @@ import UserInfo from "./UserInfo.js";
 import Card from "./Card.js";
 import Section from "./Section.js";
 import FormValidator from "./FormValidator";
+import PopupWithImage from './PopupWithImage';
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const postAddButton = document.querySelector('.profile__add-button');
+
+const popupWithImage = new PopupWithImage('popup-with-image','popup-with-image__figcaption');
+const popupDeleteCard = new PopupWithForm('popup_type_delete-card', (evt, card) => {
+  this.rendertext(true, 'Удаление...');
+  api.deleteCard(this.cardId).then(() => {
+    evt.target.closest(`.${this.selector}`).remove();
+  })
+  .catch(api.errorHandler)
+  .finally(() => {
+    this.renderText(false);
+  });
+
+},'popup__form_type_delete-card', null,'popup__save-button_type_delete-card');
 
 function getUserInfoWithCards() {
   Promise.all(
@@ -51,7 +65,12 @@ const userInfo = new UserInfo(
 const section = new Section({
   renderer: (cardData) => {
     const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = cardData;
-    const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', null);
+    const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', (evt)  => {
+      popupWithImage.open(evt.target.src, this.name, this.name);
+    },
+    (evt) => {
+      popupDeleteCard.open(evt, this);
+    });
     section.addItem(newPost);
   }
 }, 'posts');
