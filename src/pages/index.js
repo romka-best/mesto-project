@@ -1,14 +1,14 @@
 'use strict';
 
-import '../pages/index.css';
+import './index.css';
 
-import Api from './api.js';
-import UserInfo from './UserInfo.js';
-import Card from './Card.js';
-import Section from './Section.js';
-import FormValidator from './FormValidator.js';
-import PopupWithImage from './PopupWithImage.js';
-import PopupWithForm from './PopupWithForm.js';
+import Api from '../components/Api.js';
+import UserInfo from '../components/UserInfo.js';
+import Card from '../components/Card.js';
+import Section from '../components/Section.js';
+import FormValidator from '../components/FormValidator.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithForm from '../components/PopupWithForm.js';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-6',
@@ -29,8 +29,13 @@ const settingsForm = {
   inactiveButtonClass: 'popup__save-button_inactive',
   inputErrorClass: 'popup__input-field_type_error',
   errorClass: 'popup__input-field-error_active'
-}
-let tempPost;
+};
+
+// Validators
+const profileEditFormValidator = new FormValidator(settingsForm, document.forms['edit-profile']);
+const postAddFormValidator = new FormValidator(settingsForm, document.forms['add-post']);
+const avatarUpdateFormValidator = new FormValidator(settingsForm, document.forms['update-avatar']);
+const validators = [profileEditFormValidator, postAddFormValidator, avatarUpdateFormValidator];
 
 function getUserInfoWithCards() {
   api.getInitialData()
@@ -45,35 +50,37 @@ function getUserInfoWithCards() {
     })
     .catch(api.errorHandler);
 }
+
 function initialCard({name, link, likes, _id: cardId, owner: {_id: ownerId}}) {
   const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', (evt) => {
-    popupWithImage.open(evt.target.src, name, name);
-  },
-  () => {
-    tempPost = newPost;
-    popupDeleteCard.open();
-  },
-  (cardId, reactionPressed) => {
-    api
-      .deleteLikeOnCard(cardId)
-      .then((result) => {
-        reactionPressed.classList.remove('post__button-like_active');
-        newPost._updateLikesOnPost(result.likes.length);
-      })
-      .catch(api.errorHandler);
-  },
-  (cardId, reactionPressed) => {
-    api
-      .putLikeOnCard(cardId)
-      .then((result) => {
-        reactionPressed.classList.add('post__button-like_active');
-        newPost._updateLikesOnPost(result.likes.length);
-      })
-      .catch(api.errorHandler);
-  });
+      popupWithImage.open(evt.target.src, name, name);
+    },
+    () => {
+      localStorage.setItem('cardId', cardId);
+      popupDeleteCard.open();
+    },
+    (cardId, reactionPressed) => {
+      api
+        .deleteLikeOnCard(cardId)
+        .then((result) => {
+          reactionPressed.classList.remove('post__button-like_active');
+          newPost._updateLikesOnPost(result.likes.length);
+        })
+        .catch(api.errorHandler);
+    },
+    (cardId, reactionPressed) => {
+      api
+        .putLikeOnCard(cardId)
+        .then((result) => {
+          reactionPressed.classList.add('post__button-like_active');
+          newPost._updateLikesOnPost(result.likes.length);
+        })
+        .catch(api.errorHandler);
+    });
 
   return newPost;
 }
+
 const userInfo = new UserInfo(
   document.querySelector('.profile__name'),
   document.querySelector('.profile__description'),
@@ -86,9 +93,10 @@ const popupDeleteCard = new PopupWithForm('popup_type_delete-card', 'popup__form
   {
     callBackSubmitForm: () => {
       popupDeleteCard.renderText(true, 'Удаление...');
-      api.deleteCard(tempPost._cardId)
+      api.deleteCard(localStorage.getItem('cardId'))
         .then(() => {
-          document.getElementById(`${tempPost._cardId}`).remove();
+          document.getElementById(`${localStorage.getItem('cardId')}`).remove();
+          localStorage.removeItem('cardId');
           popupDeleteCard.close();
         })
         .catch(api.errorHandler)
@@ -120,6 +128,8 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', 'popup__
         .then((newUrl) => {
           userInfo.userPhotoElement.src = newUrl;
           popupUpdateAvatar.close();
+          popupUpdateAvatar.reset();
+          avatarUpdateFormValidator.toggleButtonState();
         })
         .catch(api.errorHandler)
         .finally(() => {
@@ -130,12 +140,14 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', 'popup__
 const popupAddPost = new PopupWithForm('popup_type_add-post', 'popup__form_type_add-post', 'popup__input-field', 'popup__save-button',
   {
     callBackSubmitForm: (newCard) => {
-      popupAddPost.renderText(true);
+      popupAddPost.renderText(true, 'Создание...');
       api.addCard(newCard)
         .then((newCard) => {
           const card = initialCard(newCard);
           section.addItem(card.createCard());
           popupAddPost.close();
+          popupAddPost.reset();
+          postAddFormValidator.toggleButtonState();
         })
         .catch(api.errorHandler)
         .finally(() => {
@@ -149,14 +161,9 @@ popups.forEach((popup) => {
   popup.setEventListeners();
 });
 
-const setFormValidation = (formElement) => {
-  const formValidator = new FormValidator(settingsForm, formElement);
+validators.forEach((formValidator) => {
   formValidator.enableValidation();
-}
-
-Array.from(document.forms).forEach(form => {
-  setFormValidation(form);
-})
+});
 
 const section = new Section({
   renderer: (cardData) => {
@@ -171,6 +178,7 @@ profileEditButton.addEventListener('click', () => {
   const user = userInfo.getUserInfo();
   inputNameProfile.value = user.name;
   inputDescriptionProfile.value = user.description;
+  profileEditFormValidator.checkAllInputValidity();
   popupEditProfile.open();
 });
 

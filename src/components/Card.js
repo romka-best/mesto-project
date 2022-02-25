@@ -47,7 +47,6 @@ export default class Card {
 
   _isSomeId() {
     if (this._likes.some((likeElement) => {
-      console.log(likeElement._id === localStorage.getItem('userId'));
       return likeElement._id === localStorage.getItem('userId');
     })) {
       this._buttonLikePost.classList.add('post__button-like_active');
