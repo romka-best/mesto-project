@@ -18,7 +18,7 @@ export default class FormValidator {
   }
 
   enableValidation() {
-    const fieldsetList = Array.from(this._formElement.querySelectorAll(this._fieldsetSelector));
+    const fieldsetList = Array.from(this._formElement.querySelectorAll(`.${this._fieldsetSelector}`));
     fieldsetList.forEach((fieldSet) => {
       this._setEventListeners(fieldSet);
     });
@@ -42,13 +42,13 @@ export default class FormValidator {
     if (!inputElement.validity.valid) {
       this._showInputError(inputElement, inputElement.validationMessage);
     } else {
-      this._hideInputError(this._formElement, inputElement);
+      this._hideInputError(inputElement);
     }
   };
 
-  _inputListener(evt) {
-    this._checkInputValidity(this._formElement, evt.target);
-    this._toggleButtonState(this._inputList, this._buttonElement);
+  _inputListener(inputElement) {
+    this._checkInputValidity(inputElement);
+    this._toggleButtonState();
   }
 
   _setEventListeners() {
@@ -58,7 +58,9 @@ export default class FormValidator {
     this._toggleButtonState();
 
     this._inputList.forEach((inputElement) => {
-      inputElement.addEventListener('input', this._inputListener);
+      inputElement.addEventListener('input', () => {
+        this._inputListener(inputElement);
+      });
     });
   }
 

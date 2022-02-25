@@ -12,10 +12,10 @@ export default class Card {
     this._cardId = cardId;
     this._ownerId = ownerId;
     this._selector = selector;
-    this._handleCardClick = handleCardClick;
-    this._handleDeleteCardClick = handleDeleteCardCLick;
-    this._deleteLike = deleteLike;
-    this._setLike = setLike;
+    this._handleCardClick = handleCardClick.bind(this);
+    this._handleDeleteCardClick = handleDeleteCardCLick.bind(this);
+    this._deleteLike = deleteLike.bind(this);
+    this._setLike = setLike.bind(this);
   }
 
   _getElement() {
@@ -47,7 +47,8 @@ export default class Card {
 
   _isSomeId() {
     if (this._likes.some((likeElement) => {
-      return likeElement._id === Number.parseInt(localStorage.getItem('userId'));
+      console.log(likeElement._id === localStorage.getItem('userId'));
+      return likeElement._id === localStorage.getItem('userId');
     })) {
       this._buttonLikePost.classList.add('post__button-like_active');
     }

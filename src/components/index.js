@@ -45,7 +45,35 @@ function getUserInfoWithCards() {
     })
     .catch(api.errorHandler);
 }
+function initialCard({name, link, likes, _id: cardId, owner: {_id: ownerId}}) {
+  const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', (evt) => {
+    popupWithImage.open(evt.target.src, name, name);
+  },
+  () => {
+    tempPost = newPost;
+    popupDeleteCard.open();
+  },
+  (cardId, reactionPressed) => {
+    api
+      .deleteLikeOnCard(cardId)
+      .then((result) => {
+        reactionPressed.classList.remove('post__button-like_active');
+        newPost._updateLikesOnPost(result.likes.length);
+      })
+      .catch(api.errorHandler);
+  },
+  (cardId, reactionPressed) => {
+    api
+      .putLikeOnCard(cardId)
+      .then((result) => {
+        reactionPressed.classList.add('post__button-like_active');
+        newPost._updateLikesOnPost(result.likes.length);
+      })
+      .catch(api.errorHandler);
+  });
 
+  return newPost;
+}
 const userInfo = new UserInfo(
   document.querySelector('.profile__name'),
   document.querySelector('.profile__description'),
@@ -105,7 +133,8 @@ const popupAddPost = new PopupWithForm('popup_type_add-post', 'popup__form_type_
       popupAddPost.renderText(true);
       api.addCard(newCard)
         .then((newCard) => {
-          section.addItem(newCard.createCard());
+          const card = initialCard(newCard);
+          section.addItem(card.createCard());
           popupAddPost.close();
         })
         .catch(api.errorHandler)
@@ -131,32 +160,7 @@ Array.from(document.forms).forEach(form => {
 
 const section = new Section({
   renderer: (cardData) => {
-    const {name, link, likes, _id: cardId, owner: {_id: ownerId}} = cardData;
-    const newPost = new Card({name, link, likes, cardId, ownerId}, 'post', (evt) => {
-        popupWithImage.open(evt.target.src, name, name);
-      },
-      () => {
-        tempPost = newPost;
-        popupDeleteCard.open();
-      },
-      (cardId, reactionPressed) => {
-        api
-          .deleteLikeOnCard(cardId)
-          .then((result) => {
-            reactionPressed.classList.remove('post__button-like_active');
-            newPost._updateLikesOnPost(result.likes.length);
-          })
-          .catch(api.errorHandler);
-      },
-      (cardId, reactionPressed) => {
-        api
-          .putLikeOnCard(cardId)
-          .then((result) => {
-            reactionPressed.classList.add('post__button-like_active');
-            newPost._updateLikesOnPost(result.likes.length);
-          })
-          .catch(api.errorHandler);
-      });
+    const newPost = initialCard(cardData);
     section.addItem(newPost.createCard());
   }
 }, 'posts-list');
