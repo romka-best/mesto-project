@@ -39,12 +39,7 @@ export default class Api {
           about: newUserInfo.about
         })
       })
-      .then((res) => {
-        if (res.ok) {
-          return newUserInfo;
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-      });
+      .then(this._getResponseData);
   }
 
   getCards() {
@@ -110,11 +105,6 @@ export default class Api {
           avatar: avatar.url
         })
       })
-      .then((res) => {
-        if (res.ok) {
-          return avatar.url;
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-      });
+      .then(this._getResponseData);
   }
 }

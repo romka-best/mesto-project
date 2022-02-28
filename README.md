@@ -34,6 +34,7 @@
 * Webpack
 
 **Команда**
+
 Делали вместе с Сашей Золотухиной:
 Email: sashazolotykhina@yandex.ru GitHub: https://github.com/AlexandraZolotykhina
 

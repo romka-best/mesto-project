@@ -33,9 +33,10 @@ export default class Card {
     this._element.querySelector('.post__title').textContent = this._name;
 
     this._buttonLikePost = this._element.querySelector('.post__button-like');
+    this._countLikes = this._element.querySelector('.post__count-likes')
     this._isSomeId();
 
-    this._updateLikesOnPost(this._likes.length)
+    this.updateLikesOnPost(this._likes.length)
 
     this._postPhoto = this._element.querySelector('.post__photo');
     this._postPhoto.src = this._link;
@@ -73,7 +74,7 @@ export default class Card {
     }
   }
 
-  _updateLikesOnPost = (countLikes) => {
-    this._element.querySelector('.post__count-likes').textContent = countLikes;
+  updateLikesOnPost = (countLikes) => {
+    this._countLikes.textContent = countLikes;
   }
 }
