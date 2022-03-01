@@ -1,12 +1,9 @@
-import { api } from "../utils/constants.js";
+import {api} from '../utils/constants.js';
+
 export default class Card {
-  constructor({
-                name,
-                link,
-                likes,
-                cardId,
-                ownerId
-              }, selector, handleCardClick, handleDeleteCardCLick, deleteLike, setLike) {
+  constructor(
+    name, link, likes, cardId, ownerId,
+    selector, handleCardClick, handleDeleteCardCLick, deleteLike, setLike) {
     this._name = name;
     this._link = link;
     this._likes = likes;
@@ -59,16 +56,16 @@ export default class Card {
     this._likeButton.addEventListener('click', () => {
       if (this._likeButton.classList.contains('post__button-like_active')) {
         this._handleDeleteLike(this)
-        .then(() => {
-          this._likeButton.classList.remove('post__button-like_active');
-        })
-        .catch(api.errorHandler);
+          .then(() => {
+            this._likeButton.classList.remove('post__button-like_active');
+          })
+          .catch(api.errorHandler);
       } else {
         this._handleSetLike(this)
-        .then(() => {
-          this._likeButton.classList.add('post__button-like_active');
-        })
-        .catch(api.errorHandler);;
+          .then(() => {
+            this._likeButton.classList.add('post__button-like_active');
+          })
+          .catch(api.errorHandler);
       }
     });
 

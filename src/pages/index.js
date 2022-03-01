@@ -46,5 +46,5 @@ profileAvatar.addEventListener('click', () => {
 })
 
 window.onload = function () {
-  document.querySelector('.page').classList.remove("page_without-transition");
+  document.querySelector('.page').classList.remove('page_without-transition');
 };

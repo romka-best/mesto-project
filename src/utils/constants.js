@@ -4,8 +4,7 @@ import UserInfo from '../components/UserInfo.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import Section from '../components/Section.js';
-
-import {initializeCard} from './functions.js';
+import Card from '../components/Card.js';
 
 
 const api = new Api({
@@ -25,7 +24,6 @@ const inputDescriptionProfile = document.querySelector('.popup__input-field_type
 
 const settingsForm = {
   inputSelector: 'popup__input-field',
-  fieldsetSelector: 'popup__fieldset',
   submitButtonSelector: 'popup__save-button',
   inactiveButtonClass: 'popup__save-button_inactive',
   inputErrorClass: 'popup__input-field_type_error',
@@ -44,7 +42,7 @@ const userInfo = new UserInfo(
 );
 
 const popupWithImage = new PopupWithImage('popup-with-image', 'popup-with-image__image', 'popup-with-image__figcaption');
-const popupDeleteCard = new PopupWithForm('popup_type_delete-card',
+const popupDeleteCard = new PopupWithForm('popup_type_delete-card', false,
   {
     callBackSubmitForm: () => {
       popupDeleteCard.renderText(true, 'Удаление...');
@@ -75,18 +73,20 @@ const popupEditProfile = new PopupWithForm('popup_type_edit-profile',
         });
     }
   });
-const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar',
+const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', false,
   {
     callBackSubmitForm: (avatar) => {
       popupUpdateAvatar.renderText(true);
       api.updateUserAvatar(avatar)
         .then((avatarData) => {
           userInfo.setUserInfo(avatarData);
+          popupUpdateAvatar.isNeedReset = true;
           popupUpdateAvatar.close();
           avatarUpdateFormValidator.toggleButtonState();
         })
         .catch(api.errorHandler)
         .finally(() => {
+          popupUpdateAvatar.isNeedReset = false;
           popupUpdateAvatar.renderText(false);
         });
     }
@@ -100,11 +100,13 @@ const popupAddPost = new PopupWithForm('popup_type_add-post',
           const card = initializeCard(cardData);
           section.addItem(card.createCard());
 
+          popupAddPost.isNeedReset = true;
           popupAddPost.close();
           postAddFormValidator.toggleButtonState();
         })
         .catch(api.errorHandler)
         .finally(() => {
+          popupAddPost.isNeedReset = false;
           popupAddPost.renderText(false);
         });
     }
@@ -113,9 +115,30 @@ const popupAddPost = new PopupWithForm('popup_type_add-post',
 const popups = [popupEditProfile, popupAddPost, popupWithImage, popupDeleteCard, popupUpdateAvatar];
 
 const section = new Section({
-  renderer: (cardData) => {
-    const newPost = initializeCard(cardData);
-    section.addItem(newPost.createCard());
+  renderer: ({name, link, likes, _id: cardId, owner: {_id: ownerId}}) => {
+    const newPost = new Card(name, link, likes, cardId, ownerId, 'post',
+      () => {
+        popupWithImage.open(link, name, name);
+      },
+      () => {
+        localStorage.setItem('cardId', cardId);
+        popupDeleteCard.open();
+      },
+      () => {
+        return api
+          .deleteLikeOnCard(cardId)
+          .then((result) => {
+            newPost.updateLikesOnPost(result.likes.length);
+          });
+      },
+      () => {
+        return api
+          .putLikeOnCard(cardId)
+          .then((result) => {
+            newPost.updateLikesOnPost(result.likes.length);
+          });
+      });
+    return newPost.createCard();
   }
 }, 'posts-list');
 

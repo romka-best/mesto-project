@@ -1,14 +1,12 @@
 export default class FormValidator {
   constructor({
                 inputSelector,
-                fieldsetSelector,
                 submitButtonSelector,
                 inactiveButtonClass,
                 inputErrorClass,
                 errorClass
               }, formElement) {
     this._inputSelector = inputSelector;
-    this._fieldsetSelector = fieldsetSelector;
     this._submitButtonSelector = submitButtonSelector;
     this._inactiveButtonClass = inactiveButtonClass;
     this._inputErrorClass = inputErrorClass;
@@ -18,10 +16,7 @@ export default class FormValidator {
   }
 
   enableValidation() {
-    const fieldsetList = Array.from(this._formElement.querySelectorAll(`.${this._fieldsetSelector}`));
-    fieldsetList.forEach((fieldSet) => {
-      this._setEventListeners(fieldSet);
-    });
+    this._setEventListeners();
   };
 
   checkAllInputValidity() {

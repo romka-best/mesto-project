@@ -1,12 +1,13 @@
 import Popup from './Popup.js';
 
 export default class PopupWithForm extends Popup {
-  constructor(selector, {callBackSubmitForm}) {
+  constructor(selector, isNeedReset = true, {callBackSubmitForm}) {
     super(selector);
     this._callBackSubmitForm = callBackSubmitForm;
     this._form = this._popup.querySelector('.popup__form');
     this._inputList = this._form.querySelectorAll('.popup__input-field');
     this._button = this._form.querySelector('.popup__save-button');
+    this.isNeedReset = isNeedReset;
     this._initialButtonText = this._button.textContent;
   }
 
@@ -26,7 +27,7 @@ export default class PopupWithForm extends Popup {
 
   close() {
     super.close();
-    this._form.reset();
+    this.isNeedReset ? this._form.reset() : null;
   }
 
   setEventListeners() {
