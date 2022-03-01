@@ -4,10 +4,7 @@ import Card from '../components/Card.js';
 function getUserInfoWithCards() {
   api.getInitialData()
     .then(([userData, cardsArray]) => {
-      userInfo.userNameElement.textContent = userData.name;
-      userInfo.userDescriptionElement.textContent = userData.about;
-      userInfo.userPhotoElement.alt = userData.name;
-      userInfo.userPhotoElement.src = userData.avatar;
+      userInfo.setUserInfo(userData);
       localStorage.setItem('userId', userData._id);
 
       section.renderItems(cardsArray);
@@ -17,8 +14,8 @@ function getUserInfoWithCards() {
 
 function initializeCard({name, link, likes, _id: cardId, owner: {_id: ownerId}}) {
   const newPost = new Card({name, link, likes, cardId, ownerId}, 'post',
-    (evt) => {
-      popupWithImage.open(evt.target.src, name, name);
+    () => {
+      popupWithImage.open(link, name, name);
     },
     () => {
       localStorage.setItem('cardId', cardId);

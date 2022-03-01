@@ -15,7 +15,7 @@ export default class Popup {
   }
 
   _handleEscClose(evt) {
-    if (evt.code === 'Escape' && this._popup.classList.contains('popup_opened')) {
+    if (evt.code === 'Escape') {
       this.close();
     }
   }

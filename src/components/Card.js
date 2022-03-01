@@ -33,7 +33,7 @@ export default class Card {
     this._element.querySelector('.post__title').textContent = this._name;
 
     this._buttonLikePost = this._element.querySelector('.post__button-like');
-    this._countLikes = this._element.querySelector('.post__count-likes')
+    this._countLikes = this._element.querySelector('.post__count-likes');
     this._isSomeId();
 
     this.updateLikesOnPost(this._likes.length)

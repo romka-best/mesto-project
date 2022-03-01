@@ -44,7 +44,7 @@ const userInfo = new UserInfo(
 );
 
 const popupWithImage = new PopupWithImage('popup-with-image', 'popup-with-image__image', 'popup-with-image__figcaption');
-const popupDeleteCard = new PopupWithForm('popup_type_delete-card', 'popup__form_type_delete-card', null, 'popup__save-button_type_delete-card',
+const popupDeleteCard = new PopupWithForm('popup_type_delete-card',
   {
     callBackSubmitForm: () => {
       popupDeleteCard.renderText(true, 'Удаление...');
@@ -60,7 +60,7 @@ const popupDeleteCard = new PopupWithForm('popup_type_delete-card', 'popup__form
         });
     }
   });
-const popupEditProfile = new PopupWithForm('popup_type_edit-profile', 'popup__form_type_edit-profile', 'popup__input-field', 'popup__save-button',
+const popupEditProfile = new PopupWithForm('popup_type_edit-profile',
   {
     callBackSubmitForm: (newUserInfo) => {
       popupEditProfile.renderText(true);
@@ -75,15 +75,14 @@ const popupEditProfile = new PopupWithForm('popup_type_edit-profile', 'popup__fo
         });
     }
   });
-const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', 'popup__form_type_update-avatar', 'popup__input-field', 'popup__save-button',
+const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar',
   {
     callBackSubmitForm: (avatar) => {
       popupUpdateAvatar.renderText(true);
       api.updateUserAvatar(avatar)
         .then((avatarData) => {
-          userInfo.userPhotoElement.src = avatarData.avatar;
+          userInfo.setUserInfo(avatarData);
           popupUpdateAvatar.close();
-          popupUpdateAvatar.reset();
           avatarUpdateFormValidator.toggleButtonState();
         })
         .catch(api.errorHandler)
@@ -92,7 +91,7 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', 'popup__
         });
     }
   });
-const popupAddPost = new PopupWithForm('popup_type_add-post', 'popup__form_type_add-post', 'popup__input-field', 'popup__save-button',
+const popupAddPost = new PopupWithForm('popup_type_add-post',
   {
     callBackSubmitForm: (newCard) => {
       popupAddPost.renderText(true, 'Создание...');
@@ -102,7 +101,6 @@ const popupAddPost = new PopupWithForm('popup_type_add-post', 'popup__form_type_
           section.addItem(card.createCard());
 
           popupAddPost.close();
-          popupAddPost.reset();
           postAddFormValidator.toggleButtonState();
         })
         .catch(api.errorHandler)
