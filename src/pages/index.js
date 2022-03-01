@@ -30,7 +30,7 @@ profileEditButton.addEventListener('click', () => {
   const user = userInfo.getUserInfo();
   inputNameProfile.value = user.name;
   inputDescriptionProfile.value = user.description;
-  formValidators['edit-profile'].resetValidation();
+  formValidators['edit-profile'].resetValidation(true);
   popupEditProfile.open();
 });
 

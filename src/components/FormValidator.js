@@ -19,8 +19,13 @@ export default class FormValidator {
     this._setEventListeners();
   };
 
-  resetValidation() {
+  resetValidation(withErrors = false) {
     this._setDisabledButton();
+    if (withErrors) {
+      this._inputList.forEach((inputElement) => {
+        this._hideInputError(inputElement);
+      })
+    }
   }
 
   _setDisabledButton() {
