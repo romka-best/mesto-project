@@ -8,7 +8,7 @@ import {
   popupUpdateAvatar,
   popupAddPost,
   popups,
-  validators,
+  settingsForm,
   profileEditButton,
   postAddButton,
   profileAvatar,
@@ -17,7 +17,7 @@ import {
   profileEditFormValidator
 } from '../utils/constants.js';
 
-import {getUserInfoWithCards} from '../utils/functions.js';
+import {getUserInfoWithCards, enableValidation} from '../utils/functions.js';
 
 getUserInfoWithCards();
 
@@ -25,9 +25,7 @@ popups.forEach((popup) => {
   popup.setEventListeners();
 });
 
-validators.forEach((formValidator) => {
-  formValidator.enableValidation();
-});
+enableValidation(settingsForm);
 
 profileEditButton.addEventListener('click', () => {
   const user = userInfo.getUserInfo();

@@ -13,11 +13,13 @@ export default class UserInfo {
     };
   }
 
-  setUserInfo(newUserInfo) {
-    this._userNameElement.textContent = newUserInfo.name;
-    this._userDescriptionElement.textContent = newUserInfo.about;
-    this._userPhotoElement.alt = newUserInfo.name;
-    this._userPhotoElement.src = newUserInfo.avatar;
+  setUserInfo({ name, about, avatar, _id: userId }) {
+    this._userNameElement.textContent = name;
+    this._userDescriptionElement.textContent = about;
+    this._userPhotoElement.alt = name;
+    this._userPhotoElement.src = avatar;
+
+    localStorage.setItem('userId', userId);
   }
 
 }

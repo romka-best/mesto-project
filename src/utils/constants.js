@@ -14,7 +14,7 @@ const api = new Api({
     'Content-Type': 'application/json'
   }
 });
-
+const formValidators = {};
 const profileEditButton = document.querySelector('.profile__edit-button');
 const postAddButton = document.querySelector('.profile__add-button');
 const profileAvatar = document.querySelector('.profile__avatar');
@@ -29,11 +29,6 @@ const settingsForm = {
   inputErrorClass: 'popup__input-field_type_error',
   errorClass: 'popup__input-field-error_active'
 };
-
-const profileEditFormValidator = new FormValidator(settingsForm, document.forms['edit-profile']);
-const postAddFormValidator = new FormValidator(settingsForm, document.forms['add-post']);
-const avatarUpdateFormValidator = new FormValidator(settingsForm, document.forms['update-avatar']);
-const validators = [profileEditFormValidator, postAddFormValidator, avatarUpdateFormValidator];
 
 const userInfo = new UserInfo(
   document.querySelector('.profile__name'),
@@ -66,6 +61,7 @@ const popupEditProfile = new PopupWithForm('popup_type_edit-profile',
         .then((userInfoData) => {
           userInfo.setUserInfo(userInfoData);
           popupEditProfile.close();
+          formValidators['edit-profile'].resetValidation();
         })
         .catch(api.errorHandler)
         .finally(() => {
@@ -82,7 +78,7 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', false,
           userInfo.setUserInfo(avatarData);
           popupUpdateAvatar.isNeedReset = true;
           popupUpdateAvatar.close();
-          avatarUpdateFormValidator.toggleButtonState();
+          formValidators['update-avatar'].resetValidation();
         })
         .catch(api.errorHandler)
         .finally(() => {
@@ -97,12 +93,11 @@ const popupAddPost = new PopupWithForm('popup_type_add-post',
       popupAddPost.renderText(true, 'Создание...');
       api.addCard(newCard)
         .then((cardData) => {
-          const card = initializeCard(cardData);
-          section.addItem(card.createCard());
+          section.addItem(cardData);
 
           popupAddPost.isNeedReset = true;
           popupAddPost.close();
-          postAddFormValidator.toggleButtonState();
+          formValidators['add-post'].resetValidation();
         })
         .catch(api.errorHandler)
         .finally(() => {
@@ -144,7 +139,7 @@ const section = new Section({
 
 export {
   api, userInfo, profileEditButton, postAddButton, profileAvatar,
-  inputNameProfile, inputDescriptionProfile, profileEditFormValidator, validators,
+  inputNameProfile, inputDescriptionProfile, settingsForm, formValidators,
   popupWithImage, popupDeleteCard, popupEditProfile, popupUpdateAvatar, popupAddPost, popups, section
 };
 
