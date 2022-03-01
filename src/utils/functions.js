@@ -21,23 +21,19 @@ function initializeCard({name, link, likes, _id: cardId, owner: {_id: ownerId}})
       localStorage.setItem('cardId', cardId);
       popupDeleteCard.open();
     },
-    (cardId, reactionPressed) => {
-      api
+    () => {
+      return api
         .deleteLikeOnCard(cardId)
         .then((result) => {
-          reactionPressed.classList.remove('post__button-like_active');
           newPost.updateLikesOnPost(result.likes.length);
-        })
-        .catch(api.errorHandler);
+        });
     },
-    (cardId, reactionPressed) => {
-      api
+    () => {
+      return api
         .putLikeOnCard(cardId)
         .then((result) => {
-          reactionPressed.classList.add('post__button-like_active');
           newPost.updateLikesOnPost(result.likes.length);
-        })
-        .catch(api.errorHandler);
+        });
     });
 
   return newPost;
