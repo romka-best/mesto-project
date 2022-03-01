@@ -13,8 +13,7 @@ import {
   postAddButton,
   profileAvatar,
   inputNameProfile,
-  inputDescriptionProfile,
-  profileEditFormValidator
+  inputDescriptionProfile, formValidators
 } from '../utils/constants.js';
 
 import {getUserInfoWithCards, enableValidation} from '../utils/functions.js';
@@ -31,7 +30,7 @@ profileEditButton.addEventListener('click', () => {
   const user = userInfo.getUserInfo();
   inputNameProfile.value = user.name;
   inputDescriptionProfile.value = user.description;
-  profileEditFormValidator.checkAllInputValidity();
+  formValidators['edit-profile'].resetValidation();
   popupEditProfile.open();
 });
 

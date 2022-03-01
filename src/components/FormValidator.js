@@ -19,12 +19,6 @@ export default class FormValidator {
     this._setEventListeners();
   };
 
-  checkAllInputValidity() {
-    this._inputList.forEach((inputElement) => {
-      this._checkInputValidity(inputElement);
-    });
-  }
-
   resetValidation() {
     this._setDisabledButton();
   }

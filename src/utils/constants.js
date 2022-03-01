@@ -1,5 +1,4 @@
 import Api from '../components/Api.js';
-import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
@@ -14,7 +13,6 @@ const api = new Api({
     'Content-Type': 'application/json'
   }
 });
-const formValidators = {};
 const profileEditButton = document.querySelector('.profile__edit-button');
 const postAddButton = document.querySelector('.profile__add-button');
 const profileAvatar = document.querySelector('.profile__avatar');
@@ -22,7 +20,9 @@ const profileAvatar = document.querySelector('.profile__avatar');
 const inputNameProfile = document.querySelector('.popup__input-field_type_name-profile');
 const inputDescriptionProfile = document.querySelector('.popup__input-field_type_description-profile');
 
+const formValidators = {};
 const settingsForm = {
+  formSelector: 'popup__form',
   inputSelector: 'popup__input-field',
   submitButtonSelector: 'popup__save-button',
   inactiveButtonClass: 'popup__save-button_inactive',
@@ -37,7 +37,7 @@ const userInfo = new UserInfo(
 );
 
 const popupWithImage = new PopupWithImage('popup-with-image', 'popup-with-image__image', 'popup-with-image__figcaption');
-const popupDeleteCard = new PopupWithForm('popup_type_delete-card', false,
+const popupDeleteCard = new PopupWithForm('popup_type_delete-card',
   {
     callBackSubmitForm: () => {
       popupDeleteCard.renderText(true, 'Удаление...');
@@ -68,8 +68,8 @@ const popupEditProfile = new PopupWithForm('popup_type_edit-profile',
           popupEditProfile.renderText(false);
         });
     }
-  });
-const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar', false,
+  }, true);
+const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar',
   {
     callBackSubmitForm: (avatar) => {
       popupUpdateAvatar.renderText(true);

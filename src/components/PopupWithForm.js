@@ -1,7 +1,7 @@
 import Popup from './Popup.js';
 
 export default class PopupWithForm extends Popup {
-  constructor(selector, isNeedReset = true, {callBackSubmitForm}) {
+  constructor(selector, {callBackSubmitForm}, isNeedReset = false) {
     super(selector);
     this._callBackSubmitForm = callBackSubmitForm;
     this._form = this._popup.querySelector('.popup__form');
