@@ -1,4 +1,4 @@
-import {api} from '../utils/constants.js';
+import {api} from '../pages/index.js';
 
 export default class Card {
   constructor(
