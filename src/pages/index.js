@@ -41,7 +41,6 @@ function enableValidation(config) {
   });
 }
 
-const formValidators = {};
 export const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-6',
   headers: {
@@ -97,11 +96,11 @@ const popupUpdateAvatar = new PopupWithForm('popup_type_update-avatar',
           userInfo.setUserInfo(avatarData);
           popupUpdateAvatar.isNeedReset = true;
           popupUpdateAvatar.close();
+          popupUpdateAvatar.isNeedReset = false;
           formValidators['update-avatar'].resetValidation();
         })
         .catch(api.errorHandler)
         .finally(() => {
-          popupUpdateAvatar.isNeedReset = false;
           popupUpdateAvatar.renderText(false);
         });
     }
@@ -117,16 +116,19 @@ const popupAddPost = new PopupWithForm('popup_type_add-post',
 
           popupAddPost.isNeedReset = true;
           popupAddPost.close();
+          popupAddPost.isNeedReset = false;
           formValidators['add-post'].resetValidation();
         })
         .catch(api.errorHandler)
         .finally(() => {
-          popupAddPost.isNeedReset = false;
           popupAddPost.renderText(false);
         });
     }
   });
 const popups = [popupEditProfile, popupAddPost, popupWithImage, popupDeleteCard, popupUpdateAvatar];
+popups.forEach((popup) => {
+  popup.setEventListeners();
+});
 
 const section = new Section({
   renderer: ({name, link, likes, _id: cardId, owner: {_id: ownerId}}) => {
@@ -158,10 +160,7 @@ const section = new Section({
 
 getUserInfoWithCards();
 
-popups.forEach((popup) => {
-  popup.setEventListeners();
-});
-
+const formValidators = {};
 enableValidation(settingsForm);
 
 profileEditButton.addEventListener('click', () => {
